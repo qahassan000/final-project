@@ -8,6 +8,9 @@
 	<body>
 		<h1>Change in Video Game Sales Across the Years</h1>
 		<script type="text/javascript">
+
+			console.log("D3 version:", d3.version);
+			
 			d3.csv("vgsales.csv", function(error, data) {
 				if (error) throw error;
 
@@ -27,4 +30,5 @@
 	</body>
 
 </html>
+
 
