@@ -1,53 +1,47 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<title>Video Game Sales</title>
-	<script src="https://d3js.org/d3.v3.min.js"></script>
-	<style>
-    	text { 
-			font-family: Arial; 
-			font-size: 15px;
-		}
-		.axis path, .axis line {
-			fill: none;
-			stroke: black;
-			shape-rendering: crispEdges;
-		}
-		.tick text {
-			fill: black;
-			font-size: 11px;
-		}
-
-		rect {
-			stroke: white;
-		}
-	</style>
+    <meta charset="utf-8">
+    <title>Video Game Sales</title>
+    <!-- Load D3 v3 from the official CDN -->
+    <script src="https://d3js.org/d3.v3.min.js"></script>
 </head>
-	<body>
-		<h1>Change in Video Game Sales Across the Years</h1>
-		<script type="text/javascript">
+<body>
+    <h1>Change in Video Game Sales Across the Years</h1>
 
-			console.log("D3 version:", d3.version);
-			
-			d3.csv("vgsales.csv", function(error, data) {
-				if (error) throw error;
+    <script type="text/javascript">
+        // Test that D3 is loaded
+        console.log("D3 version:", d3.version);
 
-				data.forEach(function(d) {
-					d.Year = +d.Year;
-					d.Global_Sales = +d.Global_Sales;
-					d.NA_Sales = +d.NA_Sales;
-					d.EU_Sales = +d.EU_Sales;
-					d.JP_Sales = +d.JP_Sales;
-				});
-				
-				console.log(data);
-			});
+        // Test that JavaScript is running
+        d3.select("body").append("p").text("Hello! JavaScript is running and D3 is loaded.");
 
-			
-		</script>
-	</body>
+        // Load your CSV file
+        d3.csv("vgsales.csv", function(error, data) {
+            if (error) throw error;
 
+            // Convert numeric columns from strings to numbers
+            data.forEach(function(d) {
+                d.Year = +d.Year;
+                d.Global_Sales = +d.Global_Sales;
+                d.NA_Sales = +d.NA_Sales;
+                d.EU_Sales = +d.EU_Sales;
+                d.JP_Sales = +d.JP_Sales;
+            });
+
+            // Verify the data in the console
+            console.log("CSV data loaded:", data);
+
+            // Optional: show a small message on the page to confirm CSV loaded
+            d3.select("body")
+              .append("p")
+              .text("CSV loaded successfully! Total rows: " + data.length);
+        });
+    </script>
+</body>
 </html>
+
+
 
 
 
