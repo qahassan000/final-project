@@ -1,1 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Video Game Sales Test</title>
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+</head>
+<body>
+    <h1>Test Line Chart</h1>
+
+    <!-- Load the external D3 script -->
+    <script src="script.js"></script>
+</body>
+</html>
 
