@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Video Game Sales Test</title>
+    <title>Test Video Game Sales Line Chart</title>
     <script src="https://d3js.org/d3.v3.min.js"></script>
 </head>
 <body>
     <h1>Test Line Chart</h1>
 
     <script type="text/javascript">
-        // SVG size
+        // Small SVG
         var width = 600, height = 300, margin = 40;
 
         var svg = d3.select("body").append("svg")
@@ -21,65 +21,53 @@
         var innerWidth = width - 2*margin;
         var innerHeight = height - 2*margin;
 
-        console.log("D3 version:", d3.version);
+        // Tiny dataset (no CSV needed)
+        var salesByYear = [
+            {Year: 2000, Global_Sales: 10},
+            {Year: 2001, Global_Sales: 15},
+            {Year: 2002, Global_Sales: 20},
+            {Year: 2003, Global_Sales: 12},
+            {Year: 2004, Global_Sales: 18}
+        ];
 
-        // Load TXT file
-        d3.csv("vgsales1.txt", function(error, data) {
-            if (error) throw error;
+        // Scales
+        var x = d3.scale.linear()
+            .domain(d3.extent(salesByYear, function(d){ return d.Year; }))
+            .range([0, innerWidth]);
 
-            data.forEach(function(d) {
-                d.Year = +d.Year;
-                d.Global_Sales = +d.Global_Sales;
-            });
+        var y = d3.scale.linear()
+            .domain([0, d3.max(salesByYear, function(d){ return d.Global_Sales; })])
+            .range([innerHeight, 0]);
 
-            // Aggregate global sales by year
-            var salesByYear = d3.nest()
-                .key(function(d){ return d.Year; })
-                .rollup(function(v){ return d3.sum(v, function(d){ return d.Global_Sales; }); })
-                .entries(data)
-                .map(function(d){ return {Year: +d.key, Global_Sales: d.values}; });
+        // Line generator
+        var line = d3.svg.line()
+            .x(function(d){ return x(d.Year); })
+            .y(function(d){ return y(d.Global_Sales); });
 
-            salesByYear.sort(function(a,b){ return a.Year - b.Year; });
+        // Add axes
+        svg.append("g")
+            .attr("transform", "translate(0," + innerHeight + ")")
+            .call(d3.svg.axis().scale(x).orient("bottom").tickFormat(d3.format("d")));
 
-            // Scales
-            var x = d3.scale.linear()
-                .domain(d3.extent(salesByYear, function(d){ return d.Year; }))
-                .range([0, innerWidth]);
+        svg.append("g")
+            .call(d3.svg.axis().scale(y).orient("left"));
 
-            var y = d3.scale.linear()
-                .domain([0, d3.max(salesByYear, function(d){ return d.Global_Sales; })])
-                .range([innerHeight, 0]);
+        // Draw line
+        svg.append("path")
+            .datum(salesByYear)
+            .attr("d", line)
+            .style("stroke", "steelblue")
+            .style("fill", "none")
+            .style("stroke-width", 2);
 
-            // Line generator
-            var line = d3.svg.line()
-                .x(function(d){ return x(d.Year); })
-                .y(function(d){ return y(d.Global_Sales); });
-
-            // Add axes
-            svg.append("g")
-                .attr("transform", "translate(0," + innerHeight + ")")
-                .call(d3.svg.axis().scale(x).orient("bottom").tickFormat(d3.format("d")));
-
-            svg.append("g")
-                .call(d3.svg.axis().scale(y).orient("left"));
-
-            // Draw line
-            svg.append("path")
-                .datum(salesByYear)
-                .attr("d", line)
-                .style("stroke", "steelblue")
-                .style("fill", "none")
-                .style("stroke-width", 2);
-
-            // Draw circles for visibility
-            svg.selectAll("circle")
-                .data(salesByYear)
-              .enter().append("circle")
-                .attr("cx", function(d){ return x(d.Year); })
-                .attr("cy", function(d){ return y(d.Global_Sales); })
-                .attr("r", 3)
-                .style("fill", "red");
-        });
+        // Draw circles on points
+        svg.selectAll("circle")
+            .data(salesByYear)
+          .enter().append("circle")
+            .attr("cx", function(d){ return x(d.Year); })
+            .attr("cy", function(d){ return y(d.Global_Sales); })
+            .attr("r", 4)
+            .style("fill", "red");
     </script>
 </body>
 </html>
