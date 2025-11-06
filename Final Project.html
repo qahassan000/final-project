@@ -2,44 +2,63 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Video Game Sales</title>
-    <!-- Load D3 v3 from the official CDN -->
+    <title>Video Game Sales Test</title>
     <script src="https://d3js.org/d3.v3.min.js"></script>
 </head>
 <body>
-    <h1>Change in Video Game Sales Across the Years</h1>
+    <h1>Test Line Chart</h1>
 
     <script type="text/javascript">
-        // Test that D3 is loaded
-        console.log("D3 version:", d3.version);
+        // Small SVG
+        var width = 400, height = 200;
 
-        // Test that JavaScript is running
-        d3.select("body").append("p").text("Hello! JavaScript is running and D3 is loaded.");
+        var svg = d3.select("body").append("svg")
+            .attr("width", width)
+            .attr("height", height);
 
-        // Load your CSV file
         d3.csv("vgsales.csv", function(error, data) {
             if (error) throw error;
 
-            // Convert numeric columns from strings to numbers
             data.forEach(function(d) {
                 d.Year = +d.Year;
                 d.Global_Sales = +d.Global_Sales;
-                d.NA_Sales = +d.NA_Sales;
-                d.EU_Sales = +d.EU_Sales;
-                d.JP_Sales = +d.JP_Sales;
             });
 
-            // Verify the data in the console
-            console.log("CSV data loaded:", data);
+            // Aggregate global sales by year
+            var salesByYear = d3.nest()
+                .key(function(d){ return d.Year; })
+                .rollup(function(v){ return d3.sum(v, function(d){ return d.Global_Sales; }); })
+                .entries(data)
+                .map(function(d){ return {Year: +d.key, Global_Sales: d.values}; });
 
-            // Optional: show a small message on the page to confirm CSV loaded
-            d3.select("body")
-              .append("p")
-              .text("CSV loaded successfully! Total rows: " + data.length);
+            salesByYear.sort(function(a,b){ return a.Year - b.Year; });
+
+            // Scales
+            var x = d3.scale.linear()
+                .domain(d3.extent(salesByYear, function(d){ return d.Year; }))
+                .range([0, width]);
+
+            var y = d3.scale.linear()
+                .domain([0, d3.max(salesByYear, function(d){ return d.Global_Sales; })])
+                .range([height, 0]);
+
+            // Line generator
+            var line = d3.svg.line()
+                .x(function(d){ return x(d.Year); })
+                .y(function(d){ return y(d.Global_Sales); });
+
+            // Draw line
+            svg.append("path")
+                .datum(salesByYear)
+                .attr("d", line)
+                .style("stroke", "steelblue")
+                .style("fill", "none")
+                .style("stroke-width", 2);
         });
     </script>
 </body>
 </html>
+
 
 
 
