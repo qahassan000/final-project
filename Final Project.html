@@ -9,7 +9,7 @@
     <h1>Test Line Chart</h1>
 
     <script type="text/javascript">
-        // Set up a bigger SVG so it’s visible
+        // SVG size
         var width = 600, height = 300, margin = 40;
 
         var svg = d3.select("body").append("svg")
@@ -21,11 +21,10 @@
         var innerWidth = width - 2*margin;
         var innerHeight = height - 2*margin;
 
-        // Test D3 load
         console.log("D3 version:", d3.version);
 
-        // Load CSV
-        d3.csv("vgsales.csv", function(error, data) {
+        // Load TXT file
+        d3.csv("vgsales1.txt", function(error, data) {
             if (error) throw error;
 
             data.forEach(function(d) {
@@ -72,7 +71,7 @@
                 .style("fill", "none")
                 .style("stroke-width", 2);
 
-            // Optional: draw circles on each point for visibility
+            // Draw circles for visibility
             svg.selectAll("circle")
                 .data(salesByYear)
               .enter().append("circle")
