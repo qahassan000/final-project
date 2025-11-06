@@ -1,14 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>Video Game Sales Test</title>
-    <script src="https://d3js.org/d3.v3.min.js"></script>
-</head>
-<body>
-    <h1>Test Line Chart</h1>
+	<head>
+		<meta charset="utf-8">
+		<title>Video Game Sales</title>
+		<script type="text/javascript" src="d3/d3.v3.js"></script>
+	</head>
+	<body>
+		<h1>Change in Video Game Sales Across the Years</h1>
+		<script type="text/javascript">
+		d3.csv("vgsales.csv", function(error, data) {
+				if (error) throw error;
 
-    <!-- Load the external D3 script -->
-    <script src="script.js"></script>
-</body>
+				data.forEach(function(d) {
+					d.Year = +d.Year;
+					d.Global_Sales = +d.Global_Sales;
+					d.NA_Sales = +d.NA_Sales;
+					d.EU_Sales = +d.EU_Sales;
+					d.JP_Sales = +d.JP_Sales;
+				});
+				
+				console.log(data);
+			});
+		</script>
+	</body>
 </html>
+
+
