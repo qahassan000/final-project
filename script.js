@@ -29,7 +29,7 @@ var lineGenerator = d3.svg.line()
 
 g = d3.select("svg").select("g");
 
-xAxis = d3.svg.axis().scale(xScale).orient("bottom").tickFormat(function(d) {return "" + d}; ),
+xAxis = d3.svg.axis().scale(xScale).orient("bottom").tickFormat(function(d){return "" + d;} ),
 yAxis = d3.svg.axis().scale(yScale).orient("left");
 
 g.append("g")
