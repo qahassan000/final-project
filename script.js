@@ -17,35 +17,14 @@ d3.csv("vgsales.csv", function(error, data) {
     console.log(data); // Check that values are numbers now
 
 
-    var xScale = d3.scale.linear(),
-        yScale = d3.scale.linear();
-    
-    xScale.domain([1980, 2020]).range([0, CHART_WIDTH]);
-    yScale.domain([0, d3.max(data, function(d){return d.Global_Sales;})]).range([CHART_HEIGHT, 0]);
-    
-    var lineGenerator = d3.svg.line()
-        .x(function(d){return xScale(d.Year); })
-        .y(function(d){return yScale(d.Global_Sales); });
-    
-    var g = d3.select("svg").select("g");
-    
-    var xAxis = d3.svg.axis().scale(xScale).orient("bottom").tickFormat(function(d){return "" + d;} ),
-        yAxis = d3.svg.axis().scale(yScale).orient("left");
-    
-    g.append("g")
-        .attr("class", "axis")
-        .attr("transform", "translate(0," + CHART_HEIGHT + ")")
-        .call(xAxis);
-    
-    g.append("g")
-        .attr("class", "axis")
-        .call(yAxis);
-    
-    g.append("path")
-        .style("fill", "none")
-        .style("stroke", "steelblue")
-        .style("stroke-width", "3px")
-        .attr("d", lineGenerator(data));
+   var g = d3.select("svg").select("g");
+
+    // Test circle to check if SVG & g are working
+    g.append("circle")
+        .attr("cx", 50)
+        .attr("cy", 50)
+        .attr("r", 5)
+        .style("fill", "red");
 
 });
 
