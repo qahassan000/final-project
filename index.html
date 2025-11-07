@@ -7,24 +7,11 @@
 	</head>
 	<body>
 		<h1>Change in Video Game Sales Across the Years</h1>
-		<script type="text/javascript">
-			
-			d3.csv("vgsales.csv", function(error, data) {
-					if (error) throw error;
-
-					data.forEach(function(d) {
-						d.Year = +d.Year;
-						d.Global_Sales = +d.Global_Sales;
-						d.NA_Sales = +d.NA_Sales;
-						d.EU_Sales = +d.EU_Sales;
-						d.JP_Sales = +d.JP_Sales;
-					});
-				
-					console.log(data);
-				});
-		</script>
+		
+		<script src="script.js"></script>
 	</body>
 </html>
+
 
 
 
