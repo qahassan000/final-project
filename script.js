@@ -1,6 +1,6 @@
 
-var CHART_WIDTH = 500;
-var CHART_HEIGHT = 200;
+var CHART_WIDTH = 1500;
+var CHART_HEIGHT = 1500;
 
 
 d3.csv("vgsales.csv", function(error, data) {
