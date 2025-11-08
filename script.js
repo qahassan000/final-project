@@ -22,7 +22,7 @@ d3.csv("vgsales.csv", function(error, data) {
         })
         .entries(data)
         .map(function(d) {
-            return { fiveYear = d.key, Year: parseInt(d.key.split("-")[0]), TotalSales: d.values };
+            return { fiveYear: d.key, Year: parseInt(d.key.split("-")[0]), TotalSales: d.values };
         });
 
     salesByYear5.sort(function(a, b) { return a.Year - b.Year; });
