@@ -15,7 +15,7 @@ d3.csv("vgsales.csv", function(error, data) {
     });
 
 
-    var salesByYear5 = d3.nest
+    var salesByYear5 = d3.nest()
         .key(function(d){return d.fiveYear; })
         .rollup(function(v) {
             return d3.sum(v, function(d) { return d.Global_Sales; })
