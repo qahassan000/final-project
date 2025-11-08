@@ -61,7 +61,7 @@ d3.csv("vgsales.csv", function(error, data) {
 
     // Axes
     var xAxis = d3.svg.axis().scale(xScale).orient("bottom").tickFormat(d3.format("d"));
-    var yAxis = d3.svg.axis().scale(yScale).orient("left");
+    var yAxis = d3.svg.axis().scale(yScale).orient("left").tickFormat(d3.format("d"));
 
     g.append("g")
         .attr("class", "axis")
