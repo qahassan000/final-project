@@ -20,7 +20,7 @@ d3.csv("vgsales.csv", function(error, data) {
         .rollup(function(v) {
             return d3.sum(v, function(d) { return d.Global_Sales; })
         })
-        .entries(data);
+        .entries(data)
         .map(function(d) {
             return { fiveYear: +d.key, TotalSales: d.values };
         });
