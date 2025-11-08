@@ -22,7 +22,7 @@ d3.csv("vgsales.csv", function(error, data) {
         })
         .entries(data)
         .map(function(d) {
-            return { fiveYear: d.key, Year: parseInt(d.key.split("-")[0]), TotalSales: d.values };
+            return { fiveYear: d.key, Year: parseInt(d.key.split("-")[0]), TotalSales: +d.values };
         });
 
     salesByYear5.sort(function(a, b) { return a.Year - b.Year; });
@@ -43,14 +43,20 @@ d3.csv("vgsales.csv", function(error, data) {
     // // Sort years ascending
     // salesByYear.sort(function(a, b) { return a.Year - b.Year; });
 
+    var tickStep = 200
+    var maxSalesRounded = Math.ceil(d3.max(salesByYear5, function(d) { return d.TotalSales; }) / tickStep) * tickStep;
+    var tickIncrement = d3.range(0, maxSalesRounded + tickStep, tickStep);
+    
     // Create scales
     var xScale = d3.scale.linear()
         .domain(d3.extent(salesByYear5, function(d) { return d.Year; }))
         .range([0, CHART_WIDTH]);
-
+    
     var yScale = d3.scale.linear()
-        .domain([0, d3.max(salesByYear5, function(d) { return d.TotalSales; })])
+        .domain([0, maxSalesRounded])
         .range([CHART_HEIGHT, 0]);
+
+    
 
     // Create line generator
     var lineGenerator = d3.svg.line()
@@ -61,7 +67,7 @@ d3.csv("vgsales.csv", function(error, data) {
 
     // Axes
     var xAxis = d3.svg.axis().scale(xScale).orient("bottom").tickFormat(d3.format("d"));
-    var yAxis = d3.svg.axis().scale(yScale).orient("left").tickFormat(d3.format("d"));
+    var yAxis = d3.svg.axis().scale(yScale).orient("left").tickValues(tickIncrement).tickFormat(d3.format("d"));
 
     g.append("g")
         .attr("class", "axis")
