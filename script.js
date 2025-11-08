@@ -49,7 +49,7 @@ d3.csv("vgsales.csv", function(error, data) {
         .range([0, CHART_WIDTH]);
 
     var yScale = d3.scale.linear()
-        .domain([0, d3.max(salesByYear5, function(d) { return d.TotalSales; })])
+        .domain([0, d3.max(d.Year, function(d) { return d.TotalSales; })])
         .range([CHART_HEIGHT, 0]);
 
     // Create line generator
