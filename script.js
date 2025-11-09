@@ -1,6 +1,14 @@
 
-var CHART_WIDTH = 450;
-var CHART_HEIGHT = 450;
+var margin = { top: 50, right: 50, bottom: 100, left: 80 };
+var svgWidth = 800;
+var svgHeight = 600;
+var CHART_WIDTH = svgWidth - margin.left - margin.right;
+var CHART_HEIGHT = svgHeight - margin.top - margin.bottom;
+
+var svg = d3.select("#main");
+var g = svg.select("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
 
 d3.csv("vgsales.csv", function(error, data) {
     if (error) throw error;
@@ -45,7 +53,7 @@ d3.csv("vgsales.csv", function(error, data) {
 
     var tickStep = 200
     var maxSalesRounded = Math.ceil(d3.max(salesByYear5, function(d) { return d.TotalSales; }) / tickStep) * tickStep;
-    var tickIncrement = d3.range(0, maxSalesRounded + tickStep, tickStep);
+    var tickIncrement = d3.range(0, maxSalesRounded + 1, tickStep);
     
     // Create scales
     var xScale = d3.scale.linear()
@@ -62,8 +70,7 @@ d3.csv("vgsales.csv", function(error, data) {
     var lineGenerator = d3.svg.line()
         .x(function(d){ return xScale(d.Year); })
         .y(function(d){ return yScale(d.TotalSales); });
-
-    var g = d3.select("svg").select("g");
+    
 
     // Axes
     var xAxis = d3.svg.axis().scale(xScale).orient("bottom").tickFormat(d3.format("d"));
@@ -72,7 +79,10 @@ d3.csv("vgsales.csv", function(error, data) {
     g.append("g")
         .attr("class", "axis")
         .attr("transform", "translate(0," + CHART_HEIGHT + ")")
-        .call(xAxis);
+        .call(xAxis)
+     .selectAll("text").
+        attr("transform", "rotate(-45)").
+        style("text-anchor", "end");
 
     g.append("g")
         .attr("class", "axis")
