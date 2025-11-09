@@ -56,9 +56,9 @@ d3.csv("vgsales.csv", function(error, data) {
     var tickIncrement = d3.range(0, maxSalesRounded + 1, tickStep);
     
     // Create scales
-    var xScale = d3.scale.linear()
+    var xScale = d3.scale.ordinal()
         .domain(d3.extent(salesByYear5, function(d) { return d.fiveYear; }))
-        .range([0, CHART_WIDTH]);
+        .rangeBands([0, CHART_WIDTH], 0.1);
     
     var yScale = d3.scale.linear()
         .domain([0, maxSalesRounded])
@@ -68,12 +68,12 @@ d3.csv("vgsales.csv", function(error, data) {
 
     // Create line generator
     var lineGenerator = d3.svg.line()
-        .x(function(d){ return xScale(d.fiveYear); })
+        .x(function(d){ return xScale(d.fiveYear) + xScale.rangeBands() / 2; })
         .y(function(d){ return yScale(d.TotalSales); });
     
 
     // Axes
-    var xAxis = d3.svg.axis().scale(xScale).orient("bottom").tickFormat(d3.format("d"));
+    var xAxis = d3.svg.axis().scale(xScale).orient("bottom").tickFormat("bottom");
     var yAxis = d3.svg.axis().scale(yScale).orient("left").tickValues(tickIncrement).tickFormat(d3.format("d"));
 
     g.append("g")
