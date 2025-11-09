@@ -13,6 +13,10 @@ var g = svg.select("g")
 d3.csv("vgsales.csv", function(error, data) {
     if (error) throw error;
 
+    data = data.filter(function(d) {
+        return d.Year && !isNaN(+d.Year);
+    });
+
     // Convert strings to numbers
     data.forEach(function(d) {
         d.Year = +d.Year;
