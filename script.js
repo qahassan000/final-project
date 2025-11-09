@@ -57,7 +57,7 @@ d3.csv("vgsales.csv", function(error, data) {
     
     // Create scales
     var xScale = d3.scale.ordinal()
-        .domain(d3.extent(salesByYear5, function(d) { return d.fiveYear; }))
+        .domain(salesByYear5.map( function(d) { return d.fiveYear; }))
         .rangeBands([0, CHART_WIDTH], 0.1);
     
     var yScale = d3.scale.linear()
@@ -68,7 +68,7 @@ d3.csv("vgsales.csv", function(error, data) {
 
     // Create line generator
     var lineGenerator = d3.svg.line()
-        .x(function(d){ return xScale(d.fiveYear) + xScale.rangeBands() / 2; })
+        .x(function(d){ return xScale(d.fiveYear) + xScale.rangeBand() / 2; })
         .y(function(d){ return yScale(d.TotalSales); });
     
 
