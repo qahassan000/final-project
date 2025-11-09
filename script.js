@@ -14,7 +14,7 @@ d3.csv("vgsales.csv", function(error, data) {
     if (error) throw error;
 
     data = data.filter(function(d) {
-        return d.Year && !isNaN(+d.Year);
+        return d.Year && !isNaN(+d.Year) && +d.Year <= 2019;
     });
 
     // Convert strings to numbers
