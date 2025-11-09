@@ -80,9 +80,9 @@ d3.csv("vgsales.csv", function(error, data) {
         .attr("class", "axis")
         .attr("transform", "translate(0," + CHART_HEIGHT + ")")
         .call(xAxis)
-     .selectAll("text").
-        attr("transform", "rotate(-45)").
-        style("text-anchor", "end");
+     // .selectAll("text").
+     //    attr("transform", "rotate(-45)").
+     //    style("text-anchor", "end");
 
     g.append("g")
         .attr("class", "axis")
