@@ -73,7 +73,7 @@ d3.csv("vgsales.csv", function(error, data) {
     
 
     // Axes
-    var xAxis = d3.svg.axis().scale(xScale).orient("bottom").tickFormat("bottom");
+    var xAxis = d3.svg.axis().scale(xScale).orient("bottom");
     var yAxis = d3.svg.axis().scale(yScale).orient("left").tickValues(tickIncrement).tickFormat(d3.format("d"));
 
     g.append("g")
