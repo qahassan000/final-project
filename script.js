@@ -17,7 +17,7 @@ d3.csv("vgsales.csv", function(error, data) {
         return d.Year && !isNaN(+d.Year) && +d.Year <= 2017;
     });
 
-    var selectedGenres = new Set(["Action", "Sport", "Role-Playing", "Adventure", "Fighting", "Shooter", "Racing"]);
+    var selectedGenres = new Set(["Action", "Sports", "Role-Playing", "Adventure", "Fighting", "Shooter", "Racing"]);
     
     // Convert strings to numbers
     data.forEach(function(d) {
@@ -101,6 +101,10 @@ d3.csv("vgsales.csv", function(error, data) {
     // Axes
     var xAxis = d3.svg.axis().scale(xScale).orient("bottom");
     var yAxis = d3.svg.axis().scale(yScale).orient("left").tickValues(tickIncrement).tickFormat(d3.format("d"));
+
+    var res = nestedData.map(function(d){ return d.Genre }) // list of group names
+    var color = d3.scaleOrdinal(d3.schemeCategory10)
+    .domain(res)
 
     g.append("g")
         .attr("class", "axis")
