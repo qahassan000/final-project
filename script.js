@@ -125,6 +125,22 @@ d3.csv("vgsales.csv", function(error, data) {
         .attr("stroke-width", 3)
         .attr("d", lineGenerator);
     });
+
+    var legend = svg.append("g")
+        .attr("class", "legend")
+        .attr("transform", "translate(650, 50)");
+
+    nestedData.forEach(function(group, i){
+        var glegend = legend.append("g").attr("transform", "translate(0," + i*20 + ")");
+        glegend.append("rect")
+            .attr("width", 15)
+            .attr("height", 15)
+            .style("stroke", color(group.key));
+       glegend.append("text")
+            .attr("x", 20)
+            .attr("y", 12)
+            .text(group.key);
+    });
     
 });
 
