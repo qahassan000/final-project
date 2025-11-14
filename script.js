@@ -25,7 +25,8 @@ d3.csv("vgsales.csv", function(error, data) {
         d.fiveYear = fiveYearStart + "-" + (fiveYearStart + 4);
         
     });
-
+    
+    var lastActualYear = d3.max(data, function(d) { return d.Year; });
 
     var salesByYear5 = d3.nest()
         .key(function(d){return d.fiveYear; })
