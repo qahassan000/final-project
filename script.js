@@ -17,39 +17,47 @@ d3.csv("vgsales.csv", function(error, data) {
         return d.Year && !isNaN(+d.Year) && +d.Year <= 2017;
     });
 
+    var selectedGenres = new Set(["Action", "Sport", "Role-Playing", "Adventure", "Fighting", "Shooter", "Racing"]);
+    
     // Convert strings to numbers
     data.forEach(function(d) {
         d.Year = +d.Year;
         d.Global_Sales = +d.Global_Sales;
         var fiveYearStart = Math.floor(d.Year / 5) * 5;
         d.fiveYear = fiveYearStart + "-" + (fiveYearStart + 4);
+
+        if (!selectedGenres.has(d.Genre)) {
+            d.Genre = "Other";
+        }
         
     });
     
     var lastActualYear = d3.max(data, function(d) { return d.Year; });
 
-    var salesByYear5 = d3.nest()
+    var nestedData = d3.nest()
+        .key(function(d) {return d.Genre; })
         .key(function(d){return d.fiveYear; })
         .rollup(function(v) {
             return d3.sum(v, function(d) { return d.Global_Sales; })
         })
         .entries(data)
-        .map(function(d) {
-
+        
+        
+     nestedData.forEach(function(genreGrouped) {
+        genreGrouped.values = genreGrouped.map(function(d) {
             var startYear = parseInt(d.key.split("-")[0]);
             var endYear = startYear + 4;
             
             if (endYear > lastActualYear) {
                 endYear = lastActualYear;
             }
-            
-            return { fiveYear: startYear + "-" + endYear, Year: startYear, TotalSales: +d.values };
+            return { Genre: genreGrouped.key, fiveYear: startYear + "-" + endYear, Year: startYear, TotalSales: +d.values };
         });
-
-    salesByYear5.sort(function(a, b) { return a.Year - b.Year; });
-
+         genreGrouped.values.sort(function(a, b) { return a.Year - b.Year; });
+     });
 
     
+
     // // Group by Year and sum total sales per year
     // var salesByYear = d3.nest()
     //     .key(function(d) { return d.Year; })
@@ -64,13 +72,18 @@ d3.csv("vgsales.csv", function(error, data) {
     // // Sort years ascending
     // salesByYear.sort(function(a, b) { return a.Year - b.Year; });
 
+    var allFiveYearLabels = nestedData.values.map(function(d){return d.fiveYear; })
+    
     var tickStep = 200
-    var maxSalesRounded = Math.ceil(d3.max(salesByYear5, function(d) { return d.TotalSales; }) / tickStep) * tickStep;
+    var maxSales = d3.max(nestData, function(g){
+        return d3.max(g.values, function(d){return d.TotalSales})
+    })
+    var maxSalesRounded = Math.ceil(maxSales / tickStep) * tickStep;
     var tickIncrement = d3.range(0, maxSalesRounded + 1, tickStep);
     
     // Create scales
     var xScale = d3.scale.ordinal()
-        .domain(salesByYear5.map( function(d) { return d.fiveYear; }))
+        .domain(allFiveYearLabels)
         .rangeBands([0, CHART_WIDTH], 0.1);
     
     var yScale = d3.scale.linear()
@@ -99,12 +112,15 @@ d3.csv("vgsales.csv", function(error, data) {
         .call(yAxis);
 
     // Add line path
-    g.append("path")
-        .datum(salesByYear5)
+    nestedData.forEach(functon(group){
+        g.append("path")
+        .datum(group.values)
         .attr("fill", "none")
         .attr("stroke", "steelblue")
         .attr("stroke-width", 3)
         .attr("d", lineGenerator);
+    });
+    
 });
 
 
