@@ -130,13 +130,17 @@ d3.csv("vgsales.csv", function(error, data) {
         .attr("class", "legend")
         .attr("transform", "translate(650, 50)");
 
+    legendGroup.insert("rect", ":first-child") // Insert as the first child
+    .attr("x", 0)
+    .attr("y", 0)
+    .attr("width", 100) // Calculate based on your legend's dimensions
+    .attr("height", 300) // Calculate based on your legend's dimensions
+    .style("fill", "none")
+    .style("stroke", "black")
+    .style("stroke-width", 1);
+    
     nestedData.forEach(function(group, i){
         var glegend = legend.append("g").attr("transform", "translate(0," + i*20 + ")");
-        glegend.append("rect")
-            .attr("width", 20)
-            .attr("height", 20)
-            .style("fill", "white")
-            .style("stroke", "black");
         glegend.append("rect")
             .attr("width", 15)
             .attr("height", 15)
