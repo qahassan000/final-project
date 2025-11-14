@@ -102,9 +102,10 @@ d3.csv("vgsales.csv", function(error, data) {
     var xAxis = d3.svg.axis().scale(xScale).orient("bottom");
     var yAxis = d3.svg.axis().scale(yScale).orient("left").tickValues(tickIncrement).tickFormat(d3.format("d"));
 
-    var res = nestedData.map(function(d){ return d.Genre }) // list of group names
-    var color = d3.scale.ordinal(d3.schemeCategory10)
+    var res = nestedData.map(function(d){ return d.key }); // list of group names
+    var color = d3.scale.ordinal()
     .domain(res)
+    .range(d3.scale.category10().range());
 
     g.append("g")
         .attr("class", "axis")
@@ -120,7 +121,7 @@ d3.csv("vgsales.csv", function(error, data) {
         g.append("path")
         .datum(group.values)
         .attr("fill", "none")
-        .attr("stroke", "steelblue")
+        .attr("stroke", color(group.key))
         .attr("stroke-width", 3)
         .attr("d", lineGenerator);
     });
