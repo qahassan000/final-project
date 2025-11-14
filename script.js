@@ -38,9 +38,9 @@ d3.csv("vgsales.csv", function(error, data) {
         .key(function(d) {return d.Genre; })
         .key(function(d){return d.fiveYear; })
         .rollup(function(v) {
-            return d3.sum(v, function(d) { return d.Global_Sales; })
+            return d3.sum(v, function(d) { return d.Global_Sales; });
         })
-        .entries(data)
+        .entries(data);
         
         
      nestedData.forEach(function(genreGrouped) {
@@ -72,12 +72,12 @@ d3.csv("vgsales.csv", function(error, data) {
     // // Sort years ascending
     // salesByYear.sort(function(a, b) { return a.Year - b.Year; });
 
-    var allFiveYearLabels = nestedData.values.map(function(d){return d.fiveYear; })
+    var allFiveYearLabels = nestedData.values.map(function(d){return d.fiveYear; });
     
     var tickStep = 200
     var maxSales = d3.max(nestData, function(g){
-        return d3.max(g.values, function(d){return d.TotalSales})
-    })
+        return d3.max(g.values, function(d){return d.TotalSales; });
+    });
     var maxSalesRounded = Math.ceil(maxSales / tickStep) * tickStep;
     var tickIncrement = d3.range(0, maxSalesRounded + 1, tickStep);
     
