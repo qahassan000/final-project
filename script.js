@@ -103,7 +103,7 @@ d3.csv("vgsales.csv", function(error, data) {
     var yAxis = d3.svg.axis().scale(yScale).orient("left").tickValues(tickIncrement).tickFormat(d3.format("d"));
 
     var res = nestedData.map(function(d){ return d.Genre }) // list of group names
-    var color = d3.scaleOrdinal(d3.schemeCategory10)
+    var color = d3.scale.ordinal(d3.schemeCategory10)
     .domain(res)
 
     g.append("g")
