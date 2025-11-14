@@ -130,11 +130,11 @@ d3.csv("vgsales.csv", function(error, data) {
         .attr("class", "legend")
         .attr("transform", "translate(650, 50)");
 
-    legend.insert("rect", ":first-child") // Insert as the first child
+    legend.insert("rect", ":first-child")
     .attr("x", 0)
     .attr("y", 0)
-    .attr("width", 150) // Calculate based on your legend's dimensions
-    .attr("height", 98) // Calculate based on your legend's dimensions
+    .attr("width", 150)
+    .attr("height", 180)
     .style("fill", "none")
     .style("stroke", "black")
     .style("stroke-width", 1);
@@ -146,7 +146,7 @@ d3.csv("vgsales.csv", function(error, data) {
             .attr("height", 15)
             .style("fill", color(group.key));
        glegend.append("text")
-            .attr("x", 50)
+            .attr("x", 20)
             .attr("y", 12)
             .text(group.key);
     });
