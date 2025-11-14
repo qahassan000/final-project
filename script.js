@@ -133,6 +133,11 @@ d3.csv("vgsales.csv", function(error, data) {
     nestedData.forEach(function(group, i){
         var glegend = legend.append("g").attr("transform", "translate(0," + i*20 + ")");
         glegend.append("rect")
+            .attr("width", 20)
+            .attr("height", 20)
+            .style("fill", "white")
+            .style("stroke", "black");
+        glegend.append("rect")
             .attr("width", 15)
             .attr("height", 15)
             .style("fill", color(group.key));
