@@ -14,7 +14,7 @@ d3.csv("vgsales.csv", function(error, data) {
     if (error) throw error;
 
     data = data.filter(function(d) {
-        return d.Year && !isNaN(+d.Year) && +d.Year <= 2019;
+        return d.Year && !isNaN(+d.Year) && +d.Year <= 2017;
     });
 
     // Convert strings to numbers
@@ -83,10 +83,7 @@ d3.csv("vgsales.csv", function(error, data) {
     g.append("g")
         .attr("class", "axis")
         .attr("transform", "translate(0," + CHART_HEIGHT + ")")
-        .call(xAxis)
-     // .selectAll("text").
-     //    attr("transform", "rotate(-45)").
-     //    style("text-anchor", "end");
+        .call(xAxis);
 
     g.append("g")
         .attr("class", "axis")
