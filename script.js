@@ -130,7 +130,7 @@ d3.csv("vgsales.csv", function(error, data) {
         .attr("class", "legend")
         .attr("transform", "translate(650, 50)");
 
-    legendGroup.insert("rect", ":first-child") // Insert as the first child
+    legend.insert("rect", ":first-child") // Insert as the first child
     .attr("x", 0)
     .attr("y", 0)
     .attr("width", 100) // Calculate based on your legend's dimensions
