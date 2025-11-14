@@ -135,7 +135,7 @@ d3.csv("vgsales.csv", function(error, data) {
         glegend.append("rect")
             .attr("width", 15)
             .attr("height", 15)
-            .style("stroke", color(group.key));
+            .style("fill", color(group.key));
        glegend.append("text")
             .attr("x", 20)
             .attr("y", 12)
