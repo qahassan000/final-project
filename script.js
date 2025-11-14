@@ -34,7 +34,15 @@ d3.csv("vgsales.csv", function(error, data) {
         })
         .entries(data)
         .map(function(d) {
-            return { fiveYear: d.key, Year: parseInt(d.key.split("-")[0]), TotalSales: +d.values };
+
+            var startYear = parseInt(d.key.split("-")[0]);
+            var endYear = startYear + 4;
+            
+            if (endYear > lastActualYear) {
+                endYear = lastActualYear;
+            }
+            
+            return { fiveYear: startYear + "-" + endYear, Year: startYear, TotalSales: +d.values };
         });
 
     salesByYear5.sort(function(a, b) { return a.Year - b.Year; });
