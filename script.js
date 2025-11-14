@@ -44,7 +44,7 @@ d3.csv("vgsales.csv", function(error, data) {
         
         
      nestedData.forEach(function(genreGrouped) {
-        genreGrouped.values = genreGrouped.map(function(d) {
+        genreGrouped.values = genreGrouped.values.map(function(d) {
             var startYear = parseInt(d.key.split("-")[0]);
             var endYear = startYear + 4;
             
@@ -72,10 +72,10 @@ d3.csv("vgsales.csv", function(error, data) {
     // // Sort years ascending
     // salesByYear.sort(function(a, b) { return a.Year - b.Year; });
 
-    var allFiveYearLabels = nestedData.values.map(function(d){return d.fiveYear; });
+    var allFiveYearLabels = nestedData[0].values.map(function(d){return d.fiveYear; });
     
     var tickStep = 200
-    var maxSales = d3.max(nestData, function(g){
+    var maxSales = d3.max(nestedData, function(g){
         return d3.max(g.values, function(d){return d.TotalSales; });
     });
     var maxSalesRounded = Math.ceil(maxSales / tickStep) * tickStep;
@@ -112,7 +112,7 @@ d3.csv("vgsales.csv", function(error, data) {
         .call(yAxis);
 
     // Add line path
-    nestedData.forEach(functon(group){
+    nestedData.forEach(function(group){
         g.append("path")
         .datum(group.values)
         .attr("fill", "none")
