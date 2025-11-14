@@ -134,7 +134,7 @@ d3.csv("vgsales.csv", function(error, data) {
     .attr("x", 0)
     .attr("y", 0)
     .attr("width", 100) // Calculate based on your legend's dimensions
-    .attr("height", 300) // Calculate based on your legend's dimensions
+    .attr("height", 17) // Calculate based on your legend's dimensions
     .style("fill", "none")
     .style("stroke", "black")
     .style("stroke-width", 1);
@@ -146,7 +146,7 @@ d3.csv("vgsales.csv", function(error, data) {
             .attr("height", 15)
             .style("fill", color(group.key));
        glegend.append("text")
-            .attr("x", 20)
+            .attr("x", 40)
             .attr("y", 12)
             .text(group.key);
     });
