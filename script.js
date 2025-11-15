@@ -94,7 +94,7 @@ d3.csv("vgsales.csv", function(error, data) {
 
     // Create line generator
     var lineGenerator = d3.svg.line()
-        .x(function(d){ return xScale(d.fiveYear) + xScale.rangeBand(); })
+        .x(function(d){ return xScale(d.fiveYear) + xScale.rangeBand() / 2; })
         .y(function(d){ return yScale(d.TotalSales); });
     
 
