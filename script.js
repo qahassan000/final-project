@@ -113,9 +113,11 @@ d3.csv("vgsales.csv", function(error, data) {
             .data(group.values)
             .enter()
             .append("circle")
+            .attr("class", "point")
             .attr("cx", function(d) { return xScale(d.fiveYear) + xScale.rangeBand() / 2;})
             .attr("cy", function(d) { return yScale(d.TotalSales); })
             .attr("r", 5)
+            .style("fill", color(group.key))
             .style("opacity", 0)
             .on("mouseover", function(event, d) {
                 tooltip
