@@ -128,13 +128,13 @@ d3.csv("vgsales.csv", function(error, data) {
 
     var legend = svg.append("g")
         .attr("class", "legend")
-        .attr("transform", "translate(680, 80)");
+        .attr("transform", "translate(650, 50)");
 
     legend.insert("rect", ":first-child")
-    .attr("x", 0)
-    .attr("y", 0)
+    .attr("x", -10)
+    .attr("y", -10)
     .attr("width", 150)
-    .attr("height", 170)
+    .attr("height", 167)
     .style("fill", "none")
     .style("stroke", "black")
     .style("stroke-width", 1);
