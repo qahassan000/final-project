@@ -89,8 +89,6 @@ d3.csv("vgsales.csv", function(error, data) {
     var xAxis = d3.svg.axis().scale(xScale).orient("bottom");
     var yAxis = d3.svg.axis().scale(yScale).orient("left").tickValues(tickIncrement).tickFormat(d3.format("d"));
 
-    
-
     g.append("g")
         .attr("class", "axis")
         .attr("transform", "translate(0," + CHART_HEIGHT + ")")
@@ -100,6 +98,15 @@ d3.csv("vgsales.csv", function(error, data) {
         .attr("class", "axis")
         .call(yAxis);
 
+
+
+
+
+    var genreNames = nestedData.map(function(d){ return d.key });
+            var color = d3.scale.ordinal()
+            .domain(genreNames)
+            .range(d3.scale.category10().range());
+    
     var tooltip = d3.select("#tooltip")
         .style("opacity", 0)
         .style("position", "absolute")
@@ -135,10 +142,11 @@ d3.csv("vgsales.csv", function(error, data) {
             })
     });
 
-    var genreNames = nestedData.map(function(d){ return d.key });
-        var color = d3.scale.ordinal()
-        .domain(genreNames)
-        .range(d3.scale.category10().range());
+
+
+
+
+    
 
     // Add line path
     nestedData.forEach(function(group){
