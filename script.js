@@ -106,6 +106,19 @@ d3.csv("vgsales.csv", function(error, data) {
             var color = d3.scale.ordinal()
             .domain(genreNames)
             .range(d3.scale.category10().range());
+
+    // Add line path
+    nestedData.forEach(function(group){
+        g.append("path")
+        .datum(group.values)
+        .attr("fill", "none")
+        .attr("stroke", color(group.key))
+        .attr("stroke-width", 3)
+        .attr("d", lineGenerator);
+    });
+
+
+
     
     var tooltip = d3.select("#tooltip")
         .style("opacity", 0)
@@ -146,18 +159,8 @@ d3.csv("vgsales.csv", function(error, data) {
 
 
 
+
     
-
-    // Add line path
-    nestedData.forEach(function(group){
-        g.append("path")
-        .datum(group.values)
-        .attr("fill", "none")
-        .attr("stroke", color(group.key))
-        .attr("stroke-width", 3)
-        .attr("d", lineGenerator);
-    });
-
     var legend = svg.append("g")
         .attr("class", "legend")
         .attr("transform", "translate(650, 50)");
