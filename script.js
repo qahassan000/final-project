@@ -94,7 +94,7 @@ d3.csv("vgsales.csv", function(error, data) {
 
     // Create line generator
     var lineGenerator = d3.svg.line()
-        .x(function(d){ return xScale(d.fiveYear) + xScale.rangeBand() / 2; })
+        .x(function(d){ return xScale(d.fiveYear) + xScale.rangeBand(); })
         .y(function(d){ return yScale(d.TotalSales); });
     
 
@@ -128,13 +128,13 @@ d3.csv("vgsales.csv", function(error, data) {
 
     var legend = svg.append("g")
         .attr("class", "legend")
-        .attr("transform", "translate(650, 50)");
+        .attr("transform", "translate(680, 80)");
 
     legend.insert("rect", ":first-child")
     .attr("x", 0)
     .attr("y", 0)
     .attr("width", 150)
-    .attr("height", 180)
+    .attr("height", 170)
     .style("fill", "none")
     .style("stroke", "black")
     .style("stroke-width", 1);
