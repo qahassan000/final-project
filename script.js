@@ -34,49 +34,6 @@ d3.csv("vgsales.csv", function(error, data) {
         }
         
     });
-    var Tooltip = d3.select("#tooltip")
-    .append("div")
-    .style("opacity", 0)
-    .attr("class", "tooltip")
-    .style("background-color", "white")
-    .style("border", "solid")
-    .style("border-width", "2px")
-    .style("border-radius", "5px")
-    .style("padding", "5px");
-
-    var mouseover = function(d) {
-    Tooltip
-      .style("opacity", 1)
-    d3.select(this)
-      .style("stroke", "black")
-      .style("opacity", 1);
-  }
-  
-  var mouseleave = function(d) {
-    Tooltip
-      .style("opacity", 0)
-    d3.select(this)
-      .style("stroke", "none")
-      .style("opacity", 0.8);
-  }
-
-  svg.selectAll()
-    .data(data, function(d) {return d.fiveYear+':'+d.TotalSales;})
-    .enter()
-    .append("rect")
-      .attr("x", function(d) { return x(d.fiveYear) })
-      .attr("y", function(d) { return y(d.TotalSales) })
-      .attr("rx", 4)
-      .attr("ry", 4)
-      .attr("width", x.bandwidth() )
-      .attr("height", y.bandwidth() )
-      .style("stroke-width", 4)
-      .style("stroke", "none")
-      .style("opacity", 0.8)
-    .on("mouseover", mouseover)
-    .on("mouseleave", mouseleave);
-})
-
 
     var lastActualYear = d3.max(data, function(d) { return d.Year; });
 
@@ -143,20 +100,38 @@ d3.csv("vgsales.csv", function(error, data) {
         .attr("class", "axis")
         .call(yAxis);
 
-    
+    var tooltip = d3.select("#tooltip")
+        .style("opacity", 0)
+        .style("position", "absolute")
+        .style("background", "white")
+        .style("border", "1px solid black")
+        .style("padding", "6px")
+        .style("border-radius", "4px")
 
+    nestedData.forEach(function(group) {
+        g.selectAll(".point-" + group.key)
+            .data(group.values)
+            .enter()
+            .append("circle")
+            .attr("cx", function(d) { return xScale(d.fiveYear) + xScale.rangeBand() / 2;})
+            .attr("cy", function(d) { return yScale(d.TotalSales); })
+            .attr("r", 5)
+            .style("opacity", 0)
+            .on("mouseover", function(event, d) {
+                tooltip
+                    .style("opacity", 1)
+                    .html("Genre: " + d.Genre + "<br>Sales: " + d.TotalSales)
+                    .style("left", (event.pageX + 10) + "px")
+                    .style("top", (event.pageY - 20) + "px");
+                
+                d3.select(this).style("opacity", 1);
+            })
 
-
-
-
-
-
-
-
-
-
-
-    
+            .on("mouseout", function(d) {
+                tooltip.style("opacity", 0)
+                d3.select(this).style("opacity", 0);
+            })
+    });
 
     var genreNames = nestedData.map(function(d){ return d.key });
         var color = d3.scale.ordinal()
