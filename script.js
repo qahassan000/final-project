@@ -101,7 +101,7 @@ d3.csv("vgsales.csv", function(error, data) {
 
 
 
-    var cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+    var cbPalette = new Set(["#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"]);
     var genreNames = nestedData.map(function(d){ return d.key });
             var color = d3.scale.ordinal()
             .domain(genreNames)
