@@ -142,7 +142,7 @@ d3.csv("vgsales.csv", function(error, data) {
             .on("mouseover", function(d, i) {
                 tooltip
                     .style("opacity", 1)
-                    .html("Genre: " + d.Genre + "<br>Sales: " + Math.floor(d.TotalSales))
+                    .html("Genre: " + d.Genre + "<br>Sales: " + Math.floor(d.TotalSales * 10) / 10)
                     .style("left", (d3.event.pageX + 10) + "px")
                     .style("top", (d3.event.pageY - 20) + "px");
                 
