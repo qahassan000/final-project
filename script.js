@@ -139,17 +139,17 @@ d3.csv("vgsales.csv", function(error, data) {
             .attr("r", 5)
             .style("fill", color(group.key))
             .style("opacity", 0)
-            .on("mouseover", function(event, d) {
+            .on("mouseover", function(d, i) {
                 tooltip
                     .style("opacity", 1)
                     .html("Genre: " + d.Genre + "<br>Sales: " + d.TotalSales)
-                    .style("left", (event.pageX + 10) + "px")
-                    .style("top", (event.pageY - 20) + "px");
+                    .style("left", (d3.event.pageX + 10) + "px")
+                    .style("top", (d3.event.pageY - 20) + "px");
                 
                 d3.select(this).style("opacity", 1);
             })
 
-            .on("mouseout", function(d) {
+            .on("mouseout", function(d, i) {
                 tooltip.style("opacity", 0)
                 d3.select(this).style("opacity", 0);
             })
