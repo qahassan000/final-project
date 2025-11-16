@@ -154,6 +154,16 @@ d3.csv("vgsales.csv", function(error, data) {
             })
     });
 
+    var highlightedLine = d3.select(null)
+    
+    var highlight = svg.selectAll("line")
+        .on("click",function(d) {
+    // Recolor the last clicked rect.
+    highlightedLine.attr("fill","black");
+    // Color the new one:
+    highlightedLine = d3.select(this);
+    highlightedLine.attr("fill","steelblue");
+  })
 
 
 
