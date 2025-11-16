@@ -162,6 +162,12 @@ d3.csv("vgsales.csv", function(error, data) {
 
 
 
+    d3.selection.prototype.moveToFront = function() {
+        return this.each(function() {
+            this.parentNode.appendChild(this);
+        });
+    };
+
     nestedData.forEach(function(group) {
         g.append("path")
             .datum(group.values)
@@ -171,8 +177,8 @@ d3.csv("vgsales.csv", function(error, data) {
             .attr("stroke-width", 3)
             .attr("d", lineGenerator)
             .on("click", function() {
-                d3.selectAll(".genre-line").attr("stroke-width", 3);
-                d3.select(this).attr("stroke-width", 6);
+                d3.selectAll(".genre-line").attr("stroke-width", 3).style("fill", d3.color("gray"));
+                d3.select(this).classed("highlight", true).moveToFront();
             });
     });
 
