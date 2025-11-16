@@ -116,19 +116,21 @@ d3.csv("vgsales.csv", function(error, data) {
             var color = d3.scale.ordinal()
             .domain(genreNames)
             .range(["#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"]);
+    var lineColor = color(group.key);
 
+    
     // Add line path
     nestedData.forEach(function(group){
         g.append("path")
         .datum(group.values)
-        .attr("class", "genre-line")
+        .attr("class", "clickable-line")
         .attr("fill", "none")
-        .attr("stroke", color(group.key))
+        .attr("stroke", lineColor))
         .attr("stroke-width", 3)
         .attr("d", lineGenerator)
         .on("click", function() {
-            d3.selectAll(".genre-line").attr("stroke-width", 3).style("stroke", "grey");
-            d3.select(this).classed("highlight", true).moveToFront();
+            d3.selectAll(".clickable-line").attr("stroke-width", 3).style("stroke", "grey");
+            d3.select(this).style("stroke", lineColor).moveToFront();
             });
     });
 
@@ -152,7 +154,7 @@ d3.csv("vgsales.csv", function(error, data) {
             .attr("cx", function(d) { return xScale(d.fiveYear) + xScale.rangeBand() / 2;})
             .attr("cy", function(d) { return yScale(d.TotalSales); })
             .attr("r", 5)
-            .style("fill", color(group.key))
+            .style("fill", lineColor)
             .style("opacity", 0)
             .on("mouseover", function(d) {
                 tooltip
@@ -194,7 +196,7 @@ d3.csv("vgsales.csv", function(error, data) {
         glegend.append("rect")
             .attr("width", 15)
             .attr("height", 15)
-            .style("fill", color(group.key));
+            .style("fill", lineColor);
        glegend.append("text")
             .attr("x", 20)
             .attr("y", 12)
