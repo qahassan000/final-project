@@ -83,19 +83,9 @@ d3.csv("vgsales.csv", function(error, data) {
     var highlightedLine = d3.select(null)
 
     // Create line generator
-    var lineGenerator = svg.selectAll("line")
-        .data(nestedData)
-        .enter()
-        .append("line")
+    var lineGenerator = d3.svg.line()
         .x(function(d){ return xScale(d.fiveYear) + xScale.rangeBand() / 2; })
-        .y(function(d){ return yScale(d.TotalSales); })
-        .on("click",function(d) {
-            // Recolor the last clicked rect.
-            highlightedLine.attr("fill","black");
-            // Color the new one:
-            highlightedLine = d3.select(this);
-            highlightedLine.attr("fill","steelblue");
-      })
+        .y(function(d){ return yScale(d.TotalSales); });
         
         
     
@@ -153,7 +143,7 @@ d3.csv("vgsales.csv", function(error, data) {
             .attr("r", 5)
             .style("fill", color(group.key))
             .style("opacity", 0)
-            .on("mouseover", function(d, i) {
+            .on("mouseover", function(d) {
                 tooltip
                     .style("opacity", 1)
                     .html("Genre: " + d.Genre + "<br>Sales: " + Math.floor(d.TotalSales * 10) / 10)
@@ -163,13 +153,28 @@ d3.csv("vgsales.csv", function(error, data) {
                 d3.select(this).style("opacity", 1);
             })
 
-            .on("mouseout", function(d, i) {
+            .on("mouseout", function(d) {
                 tooltip.style("opacity", 0)
                 d3.select(this).style("opacity", 0);
             })
     });
 
-    
+
+
+
+    nestedData.forEach(function(group) {
+        g.append("path")
+            .datum(group.values)
+            .attr("class", "genre-line")
+            .attr("fill", "none")
+            .attr("stroke", color(group.key))
+            .attr("stroke-width", 3)
+            .attr("d", lineGenerator)
+            .on("click", function() {
+                d3.selectAll(".genre-line").attr("stroke-width", 3);
+                d3.select(this).attr("stroke-width", 6);
+            });
+    });
 
         
 
