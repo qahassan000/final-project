@@ -106,6 +106,16 @@ d3.csv("vgsales.csv", function(error, data) {
 
 
 
+
+    d3.selection.prototype.moveToBack = function() {
+        return this.each(function() {
+            var firstChild = this.parentNode.firstChild;
+            if (firstChild) {
+                this.parentNode.insertBefore(this, firstChild);
+            }
+        });
+    };
+    
     d3.selection.prototype.moveToFront = function() {
         return this.each(function() {
             this.parentNode.appendChild(this);
@@ -117,6 +127,36 @@ d3.csv("vgsales.csv", function(error, data) {
             .domain(genreNames)
             .range(["#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"])
 
+
+
+    svg.append("rect")
+        .attr("width", svgWidth)
+        .attr("height", svgHeight)
+        .style("fill", "none")
+        .style("pointer-events", "all")
+        .moveToBack();
+
+    
+    svg.select("rect")
+        .on("click", function(d, i) {
+            var selectedGenre = nestedData[i].key;
+
+            d3.selectAll(".clickable-line").attr("stroke-width", 3).style("stroke", color(selectedGenre)).style("opacity", 1);
+
+            d3.selectAll(".legend rect").style("opacity", 1)
+        })
+
+
+    d3.selectAll(".clickable-line, .legend g")
+    .on("click", function(event) {
+        event.stopPropagation(); // stops the click from reaching the background
+
+    });
+
+
+
+
+    
     
     // Add line path
     nestedData.forEach(function(group){
@@ -132,47 +172,6 @@ d3.csv("vgsales.csv", function(error, data) {
             d3.select(this).style("stroke", color(group.key)).style("opacity", 1).moveToFront();
             });
     });
-
-
-
-    
-    var tooltip = d3.select("#tooltip")
-        .style("opacity", 0)
-        .style("position", "absolute")
-        .style("background", "white")
-        .style("border", "1px solid black")
-        .style("padding", "6px")
-        .style("border-radius", "4px")
-
-    nestedData.forEach(function(group) {
-        g.selectAll(".point-" + group.key)
-            .data(group.values)
-            .enter()
-            .append("circle")
-            .attr("class", "point")
-            .attr("cx", function(d) { return xScale(d.fiveYear) + xScale.rangeBand() / 2;})
-            .attr("cy", function(d) { return yScale(d.TotalSales); })
-            .attr("r", 5)
-            .style("fill", color(group.key))
-            .style("opacity", 0)
-            .on("mouseover", function(d) {
-                tooltip
-                    .style("opacity", 1)
-                    .html("Genre: " + d.Genre + "<br>Sales: " + Math.floor(d.TotalSales * 10) / 10)
-                    .style("left", (d3.event.pageX + 10) + "px")
-                    .style("top", (d3.event.pageY - 20) + "px");
-                
-                d3.select(this).style("opacity", 1);
-            })
-            .on("mouseout", function(d) {
-                tooltip.style("opacity", 0)
-                d3.select(this).style("opacity", 0);
-            })
-    });
-
-        
-
-
 
 
 
@@ -201,6 +200,61 @@ d3.csv("vgsales.csv", function(error, data) {
             .attr("y", 12)
             .text(group.key);
     });
+
+
+    legend.selectAll("g")
+        .on("click", function(d, i){
+            var selectedGenre = nestedData[i].key;
+
+            d3.selectAll(".clickable-line").attr("stroke-width", 3).style("stroke", "grey").style("opacity", 0.3);
+
+            d3.selectAll(".clickable-line")
+                .filter(function(lineData) {
+                    return lineData === nestedData[i].values;
+                })
+                .style("stroke", color(selectedGenre)).style("opacity", 1).moveToFront();
+        });
+
+
+
+
+    
+
+    var tooltip = d3.select("#tooltip")
+            .style("opacity", 0)
+            .style("position", "absolute")
+            .style("background", "white")
+            .style("border", "1px solid black")
+            .style("padding", "6px")
+            .style("border-radius", "4px")
+    
+        nestedData.forEach(function(group) {
+            g.selectAll(".point-" + group.key)
+                .data(group.values)
+                .enter()
+                .append("circle")
+                .attr("class", "point")
+                .attr("cx", function(d) { return xScale(d.fiveYear) + xScale.rangeBand() / 2;})
+                .attr("cy", function(d) { return yScale(d.TotalSales); })
+                .attr("r", 5)
+                .style("fill", color(group.key))
+                .style("opacity", 0)
+                .on("mouseover", function(d) {
+                    tooltip
+                        .style("opacity", 1)
+                        .html("Genre: " + d.Genre + "<br>Sales: " + Math.floor(d.TotalSales * 10) / 10)
+                        .style("left", (d3.event.pageX + 10) + "px")
+                        .style("top", (d3.event.pageY - 20) + "px");
+                    
+                    d3.select(this).style("opacity", 1);
+                })
+                .on("mouseout", function(d) {
+                    tooltip.style("opacity", 0)
+                    d3.select(this).style("opacity", 0);
+                })
+        });
+
+    
     
 });
 
