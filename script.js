@@ -77,12 +77,27 @@ d3.csv("vgsales.csv", function(error, data) {
         .domain([0, maxSalesRounded])
         .range([CHART_HEIGHT, 0]);
 
-    
+
+
+
+    var highlightedLine = d3.select(null)
 
     // Create line generator
-    var lineGenerator = d3.svg.line()
+    var lineGenerator = svg.selectAll("line")
+        .data(nestedData)
+        .enter()
+        .append("line")
         .x(function(d){ return xScale(d.fiveYear) + xScale.rangeBand() / 2; })
-        .y(function(d){ return yScale(d.TotalSales); });
+        .y(function(d){ return yScale(d.TotalSales); })
+        .on("click",function(d) {
+            // Recolor the last clicked rect.
+            highlightedLine.attr("fill","black");
+            // Color the new one:
+            highlightedLine = d3.select(this);
+            highlightedLine.attr("fill","steelblue");
+      })
+        
+        
     
 
     // Axes
@@ -154,16 +169,9 @@ d3.csv("vgsales.csv", function(error, data) {
             })
     });
 
-    var highlightedLine = d3.select(null)
     
-    var highlight = svg.selectAll("line")
-        .on("click",function(d) {
-    // Recolor the last clicked rect.
-    highlightedLine.attr("fill","black");
-    // Color the new one:
-    highlightedLine = d3.select(this);
-    highlightedLine.attr("fill","steelblue");
-  })
+
+        
 
 
 
