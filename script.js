@@ -137,16 +137,21 @@ d3.csv("vgsales.csv", function(error, data) {
         .moveToBack();
 
 
-    nestedData.forEach(function(group){
-        svg.select("rect")
-            .on("click", function() {
     
-                d3.selectAll(".clickable-line").attr("stroke-width", 3).style("stroke", color(group.key)).style("opacity", 1);
+    svg.select("rect")
+        .on("click", function(d, i) {
+            var selectedGenre = nestedData[i].key;
+
+            d3.selectAll(".clickable-line")
+                .filter(function(lineData) {
+                    return lineData === nestedData[i].values;
+                })
+                .style("stroke", color(selectedGenre)).style("opacity", 1).moveToFront();
+
+            d3.selectAll(".legend rect").style("opacity", 1);
+        });
     
-                d3.selectAll(".legend rect").style("opacity", 1);
-            });
     
-    });
     d3.selectAll(".clickable-line, .legend g")
         .on("click", function(event) {
             event.stopPropagation(); // stops the click from reaching the background
