@@ -177,7 +177,7 @@ d3.csv("vgsales.csv", function(error, data) {
             .attr("stroke-width", 3)
             .attr("d", lineGenerator)
             .on("click", function() {
-                d3.selectAll(".genre-line").attr("stroke-width", 3).style("opacity", 0.5);
+                d3.selectAll(".genre-line").attr("stroke-width", 3).style("fill", "grey");
                 d3.select(this).classed("highlight", true).moveToFront();
             });
     });
