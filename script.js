@@ -141,7 +141,7 @@ d3.csv("vgsales.csv", function(error, data) {
         svg.select("rect")
             .on("click", function(d, i) {
     
-                d3.selectAll(".clickable-line").attr("stroke-width", 3).style("stroke", color(d.key)).style("opacity", 1);
+                d3.selectAll(".clickable-line").attr("stroke-width", 3).style("stroke", color(group.key)).style("opacity", 1);
     
                 d3.selectAll(".legend rect").style("opacity", 1);
             });
@@ -212,7 +212,7 @@ d3.csv("vgsales.csv", function(error, data) {
                 .filter(function(lineData) {
                     return lineData === nestedData[i].values;
                 })
-                .style("stroke", color(d.key)).style("opacity", 1).moveToFront();
+                .style("stroke", color(selectedGenre)).style("opacity", 1).moveToFront();
         });
 
 
