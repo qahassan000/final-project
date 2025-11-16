@@ -139,20 +139,20 @@ d3.csv("vgsales.csv", function(error, data) {
 
     nestedData.forEach(function(group){
         svg.select("rect")
-            .on("click", function(d, i) {
+            .on("click", function() {
     
                 d3.selectAll(".clickable-line").attr("stroke-width", 3).style("stroke", color(group.key)).style("opacity", 1);
     
                 d3.selectAll(".legend rect").style("opacity", 1);
             });
     
-    
-        d3.selectAll(".clickable-line, .legend g")
+    });
+    d3.selectAll(".clickable-line, .legend g")
         .on("click", function(event) {
             event.stopPropagation(); // stops the click from reaching the background
-    
+
         });
-    });
+    
 
 
 
