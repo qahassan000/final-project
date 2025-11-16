@@ -106,6 +106,12 @@ d3.csv("vgsales.csv", function(error, data) {
 
 
 
+    d3.selection.prototype.moveToFront = function() {
+        return this.each(function() {
+            this.parentNode.appendChild(this);
+        });
+    };
+    
     var genreNames = nestedData.map(function(d){ return d.key });
             var color = d3.scale.ordinal()
             .domain(genreNames)
@@ -115,10 +121,15 @@ d3.csv("vgsales.csv", function(error, data) {
     nestedData.forEach(function(group){
         g.append("path")
         .datum(group.values)
+        .attr("class", "genre-line")
         .attr("fill", "none")
         .attr("stroke", color(group.key))
         .attr("stroke-width", 3)
-        .attr("d", lineGenerator);
+        .attr("d", lineGenerator)
+        .on("click", function() {
+            d3.selectAll(".genre-line").attr("stroke-width", 3).style("stroke", "grey");
+            d3.select(this).classed("highlight", true).moveToFront();
+            });
     });
 
 
@@ -152,34 +163,10 @@ d3.csv("vgsales.csv", function(error, data) {
                 
                 d3.select(this).style("opacity", 1);
             })
-
             .on("mouseout", function(d) {
                 tooltip.style("opacity", 0)
                 d3.select(this).style("opacity", 0);
             })
-    });
-
-
-
-
-    d3.selection.prototype.moveToFront = function() {
-        return this.each(function() {
-            this.parentNode.appendChild(this);
-        });
-    };
-
-    nestedData.forEach(function(group) {
-        g.append("path")
-            .datum(group.values)
-            .attr("class", "genre-line")
-            .attr("fill", "none")
-            .attr("stroke", color(group.key))
-            .attr("stroke-width", 3)
-            .attr("d", lineGenerator)
-            .on("click", function() {
-                d3.selectAll(".genre-line").attr("stroke-width", 3).style("fill", "grey");
-                d3.select(this).classed("highlight", true).moveToFront();
-            });
     });
 
         
