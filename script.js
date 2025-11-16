@@ -107,14 +107,7 @@ d3.csv("vgsales.csv", function(error, data) {
 
 
 
-    d3.selection.prototype.moveToBack = function() {
-        return this.each(function() {
-            var firstChild = this.parentNode.firstChild;
-            if (firstChild) {
-                this.parentNode.insertBefore(this, firstChild);
-            }
-        });
-    };
+
     
     d3.selection.prototype.moveToFront = function() {
         return this.each(function() {
@@ -129,28 +122,26 @@ d3.csv("vgsales.csv", function(error, data) {
 
 
 
-    svg.append("rect")
-        .attr("width", svgWidth)
-        .attr("height", svgHeight)
-        .style("fill", "none")
-        .style("pointer-events", "all")
-        .moveToBack();
+    svg.insert("rect", ":first-child") 
+    .attr("width", svgWidth)
+    .attr("height", svgHeight)
+    .style("fill", "none")
+    .style("pointer-events", "all")
+    .on("click", function() {
+       
+        d3.selectAll(".clickable-line")
+            .style("stroke", function(d) { return color(d[0].Genre); }) 
+            .style("opacity", 1)
+            .attr("stroke-width", 3);
 
-
-    
-    svg.select("rect")
-        .on("click", function() {
-
-            d3.selectAll(".clickable-line")
-                .style("stroke", color(genreNames)).style("opacity", 1);
-
-            d3.selectAll(".legend rect").style("opacity", 1);
-        });
-    
+        
+        d3.selectAll(".legend rect")
+            .style("opacity", 1);
+    });
     
     d3.selectAll(".clickable-line, .legend g")
         .on("click", function(event) {
-            event.stopPropagation(); // stops the click from reaching the background
+            event.stopPropagation();
 
         });
     
