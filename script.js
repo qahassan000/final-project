@@ -125,12 +125,12 @@ d3.csv("vgsales.csv", function(error, data) {
         .datum(group.values)
         .attr("class", "clickable-line")
         .attr("fill", "none")
-        .attr("stroke", lineColor))
+        .attr("stroke", lineColor)
         .attr("stroke-width", 3)
         .attr("d", lineGenerator)
         .on("click", function() {
-            d3.selectAll(".clickable-line").attr("stroke-width", 3).style("stroke", "grey");
-            d3.select(this).style("stroke", lineColor).moveToFront();
+            d3.selectAll(".clickable-line").attr("stroke-width", 3).style("stroke", "grey").style("opacity", 0.3);
+            d3.select(this).style("stroke", lineColor).style("opacity", 1).moveToFront();
             });
     });
 
