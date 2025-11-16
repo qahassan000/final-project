@@ -136,22 +136,23 @@ d3.csv("vgsales.csv", function(error, data) {
         .style("pointer-events", "all")
         .moveToBack();
 
+
+    nestedData.forEach(function(group){
+        svg.select("rect")
+            .on("click", function(d, i) {
     
-    svg.select("rect")
-        .on("click", function(d, i) {
-
-            d3.selectAll(".clickable-line").attr("stroke-width", 3).style("stroke", color(d.key)).style("opacity", 1);
-
-            d3.selectAll(".legend rect").style("opacity", 1);
+                d3.selectAll(".clickable-line").attr("stroke-width", 3).style("stroke", color(d.key)).style("opacity", 1);
+    
+                d3.selectAll(".legend rect").style("opacity", 1);
+            });
+    
+    
+        d3.selectAll(".clickable-line, .legend g")
+        .on("click", function(event) {
+            event.stopPropagation(); // stops the click from reaching the background
+    
         });
-
-
-    d3.selectAll(".clickable-line, .legend g")
-    .on("click", function(event) {
-        event.stopPropagation(); // stops the click from reaching the background
-
     });
-
 
 
 
@@ -203,6 +204,7 @@ d3.csv("vgsales.csv", function(error, data) {
 
     legend.selectAll("g")
         .on("click", function(d, i){
+            var selectedGenre = nestedData[i].key;
             
             d3.selectAll(".clickable-line").attr("stroke-width", 3).style("stroke", "grey").style("opacity", 0.3);
 
