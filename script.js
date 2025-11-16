@@ -80,7 +80,7 @@ d3.csv("vgsales.csv", function(error, data) {
 
 
 
-    var highlightedLine = d3.select(null)
+
 
     // Create line generator
     var lineGenerator = d3.svg.line()
@@ -139,14 +139,10 @@ d3.csv("vgsales.csv", function(error, data) {
 
     
     svg.select("rect")
-        .on("click", function(d, i) {
-            var selectedGenre = nestedData[i].key;
+        .on("click", function() {
 
             d3.selectAll(".clickable-line")
-                .filter(function(lineData) {
-                    return lineData === nestedData[i].values;
-                })
-                .style("stroke", color(selectedGenre)).style("opacity", 1).moveToFront();
+                .style("stroke", color(genreNames)).style("opacity", 1);
 
             d3.selectAll(".legend rect").style("opacity", 1);
         });
