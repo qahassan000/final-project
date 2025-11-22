@@ -35,32 +35,33 @@ d3.csv("vgsales.csv", function(error, data) {
         
     });
 
-    var groupedSales = ["Global_Sales", "NA_Sales", "EU_Sales", "JP_Sales"];
+    var salesTypes = ["Global_Sales", "NA_Sales", "EU_Sales", "JP_Sales"];
     
     d3.select("#selectButton")
       .selectAll('option')
-      .data(groupedSales)
+      .data(salesTypes)
       .enter()
       .append('option')
       .text(function (d) { return d; }) 
       .attr("value", function (d) { return d; }); 
 
-    function update(selectedGroup) {
-
-        var dataFilter = data.map(function(d) {
-            return { Year: d.Year, value: +d[selectedGroup] };
+    function update(selectedSales) {
+        nestedData.forEach(function(group) {
+            var newData = group.values.map(function(d) {
+                return {
+                    Genre: group.key,
+                    fiveYear: d.key,
+                    TotalSales: d3.sum(d.values, function(v) { return +v[selectedSales]; })
+                };
+            });
+    
+            g.select(".line-" + group.key)
+              .datum(newData)
+              .attr("d", lineGenerator);
         });
-
-        d3.select(".myLine")
-            .datum(dataFilter)
-            .attr("d", d3.line()
-                  .x(function(d) {return xAxis(d.Year);})
-                  .y(function(d) {return yAxis(d.value);})
-                 )
-            .attr("stroke", color(selectedGroup));
     }
 
-    var selection = d3.select("#selectButton").on("change", function(d) {
+    d3.select("#selectButton").on("change", function(d) {
         var selectedOption = d3.select(this).property("value");
         update(selectedOption);
     });
@@ -72,7 +73,7 @@ d3.csv("vgsales.csv", function(error, data) {
         .key(function(d) {return d.Genre; })
         .key(function(d){return d.fiveYear; })
         .rollup(function(v) {
-            return d3.sum(v, function(d) { return d.selection; });
+            return d3.sum(v, function(d) { return d.Global_Sales; });
         })
         .entries(data);
 
@@ -163,6 +164,7 @@ d3.csv("vgsales.csv", function(error, data) {
     nestedData.forEach(function(group){
         g.append("path")
         .datum(group.values)
+        .attr("class", "line-" + group.key)
         .attr("class", "clickable-line")
         .attr("fill", "none")
         .attr("stroke", color(group.key))
