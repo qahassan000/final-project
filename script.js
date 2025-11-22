@@ -34,69 +34,7 @@ d3.csv("vgsales.csv", function(error, data) {
         }
         
     });
-
-    var originalData = data.slice();
-    var salesTypes = ["Global_Sales", "NA_Sales", "EU_Sales", "JP_Sales"];
     
-    d3.select("#selectButton")
-      .selectAll('option')
-      .data(salesTypes)
-      .enter()
-      .append('option')
-      .text(function (d) { return d; }) 
-      .attr("value", function (d) { return d; }); 
-
-
-
-    var lastActualYear = d3.max(data, function(d) { return d.Year; });
-    
-    function update(selectedSales) {
-       var nestedDataFilter = d3.nest()
-        .key(function(d) {return d.Genre; })
-        .key(function(d){return d.fiveYear; })
-        .rollup(function(v) {
-            return d3.sum(v, function(d) { return +d[selectedSales]; });
-        })
-        .entries(originalData);
-
-        nestedDataFilter.forEach(function(genreGrouped) {
-        genreGrouped.values = genreGrouped.values.map(function(d) {
-            var startYear = parseInt(d.key.split("-")[0]);
-            var endYear = startYear + 4;
-            
-            if (endYear > lastActualYear) {
-                endYear = lastActualYear;
-            }
-            return { Genre: genreGrouped.key, fiveYear: startYear + "-" + endYear, Year: startYear, TotalSales: +d.values };
-        });
-         genreGrouped.values.sort(function(a, b) { return a.Year - b.Year; });
-     });
-
-
-        var maxSales = d3.max(nestedDataFilter, function(g){
-            return d3.max(g.values, function(d){ return d.TotalSales; });
-        });
-        
-        yScale.domain([0, maxSales]);
-    
-        // Update y-axis
-        g.select(".y.axis")
-          .transition().duration(500)
-          .call(yAxis);
-        
-        nestedDataFilter.forEach(function(group){
-            g.select(".line-" + group.key)
-              .datum(group.values)
-              .transition().duration(500)
-              .attr("d", lineGenerator);
-        });
-    }
-
-    
-    d3.select("#selectButton").on("change", function(d) {
-        var selectedOption = d3.select(this).property("value");
-        update(selectedOption);
-    });
 
     
     var nestedData = d3.nest()
@@ -107,7 +45,11 @@ d3.csv("vgsales.csv", function(error, data) {
         })
         .entries(data);
 
-        nestedData.forEach(function(genreGrouped) {
+    
+        
+    var lastActualYear = d3.max(data, function(d) { return d.Year; });
+
+     nestedData.forEach(function(genreGrouped) {
         genreGrouped.values = genreGrouped.values.map(function(d) {
             var startYear = parseInt(d.key.split("-")[0]);
             var endYear = startYear + 4;
@@ -119,11 +61,9 @@ d3.csv("vgsales.csv", function(error, data) {
         });
          genreGrouped.values.sort(function(a, b) { return a.Year - b.Year; });
      });
-    
-    
 
-    
-    
+
+
     
     var allFiveYearLabels = nestedData[0].values.map(function(d){return d.fiveYear; });
     
@@ -184,7 +124,7 @@ d3.csv("vgsales.csv", function(error, data) {
     var genreNames = nestedData.map(function(d){ return d.key });
             var color = d3.scale.ordinal()
             .domain(genreNames)
-            .range(["#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"])
+            .range(["#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"])
 
 
     
@@ -192,14 +132,14 @@ d3.csv("vgsales.csv", function(error, data) {
     nestedData.forEach(function(group){
         g.append("path")
         .datum(group.values)
-        .attr("class", "clickable-line line-" + group.key)
+        .attr("class", "clickable-line")
         .attr("fill", "none")
         .attr("stroke", color(group.key))
         .attr("stroke-width", 3)
         .attr("d", lineGenerator)
         .on("click", function() {
             d3.selectAll(".clickable-line").attr("stroke-width", 3).style("stroke", "grey").style("opacity", 0.3);
-            d3.select(this).style("stroke", function(d) { return color(d[0].Genre); }).style("opacity", 1).moveToFront();
+            d3.select(this).style("stroke", color(group.key)).style("opacity", 1).moveToFront();
             });
     });
 
@@ -246,6 +186,8 @@ d3.csv("vgsales.csv", function(error, data) {
                 .style("stroke", color(selectedGenre)).style("opacity", 1).moveToFront();
         });
 
+
+    
 
     svg.insert("rect", ":first-child") 
     .attr("width", svgWidth)
