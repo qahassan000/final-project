@@ -139,7 +139,8 @@ d3.csv("vgsales.csv", function(error, data) {
         .attr("d", lineGenerator)
         .on("click", function(d) {
             d3.selectAll(".clickable-line").attr("stroke-width", 3).style("stroke", "grey").style("opacity", 0.3);
-            d3.select(this).style("stroke", color(group.key)).style("opacity", 1).moveToFront();
+            d3.select(this).style("stroke", color(d[0].Genre)).style("opacity", 1).moveToFront();
+            d3.event.stopPropagation();
             });
     });
 
@@ -181,9 +182,10 @@ d3.csv("vgsales.csv", function(error, data) {
 
             d3.selectAll(".clickable-line")
                 .filter(function(lineData) {
-                    return lineData === nestedData[i].values;
+                    return lineData[0].Genre === selectedGenre;
                 })
                 .style("stroke", color(selectedGenre)).style("opacity", 1).moveToFront();
+            d3.event.stopPropagation();
         });
 
 
@@ -205,12 +207,7 @@ d3.csv("vgsales.csv", function(error, data) {
         d3.selectAll(".legend rect")
             .style("opacity", 1);
     });
-    
-    d3.selectAll(".clickable-line, .legend g")
-        .on("click", function(d) {
-            d3.event.stopPropagation();
 
-        });
 
     
 
