@@ -138,9 +138,8 @@ d3.csv("vgsales.csv", function(error, data) {
         .attr("stroke-width", 3)
         .attr("d", lineGenerator)
         .on("click", function(d) {
-            var genre = d[0].Genre;
             d3.selectAll(".clickable-line").attr("stroke-width", 3).style("stroke", "grey").style("opacity", 0.3);
-            d3.select(this).style("stroke", color(genre)).style("opacity", 1).moveToFront();
+            d3.select(this).style("stroke", color(group.key)).style("opacity", 1).moveToFront();
             });
     });
 
@@ -175,24 +174,20 @@ d3.csv("vgsales.csv", function(error, data) {
 
 
     legend.selectAll("g")
-        .on("click", function(d){
-            var selectedGenre = d.key;
+        .on("click", function(d, i){
+            var selectedGenre = nestedData[i].key;
             
             d3.selectAll(".clickable-line").attr("stroke-width", 3).style("stroke", "grey").style("opacity", 0.3);
 
             d3.selectAll(".clickable-line")
                 .filter(function(lineData) {
-                    return lineData[0].Genre === selectedGenre;
+                    return lineData === nestedData[i].values;
                 })
                 .style("stroke", color(selectedGenre)).style("opacity", 1).moveToFront();
         });
 
 
-    d3.selectAll(".clickable-line, .legend g")
-        .on("click", function(d) {
-            d3.event.stopPropagation();
-
-        });
+    
 
     svg.insert("rect", ":first-child") 
     .attr("width", svgWidth)
@@ -211,7 +206,11 @@ d3.csv("vgsales.csv", function(error, data) {
             .style("opacity", 1);
     });
     
-    
+    d3.selectAll(".clickable-line, .legend g")
+        .on("click", function(d) {
+            d3.event.stopPropagation();
+
+        });
 
     
 
