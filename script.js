@@ -55,7 +55,7 @@ d3.csv("vgsales.csv", function(error, data) {
             .datum(dataFilter)
             .attr("d", d3.line()
                   .x(function(d) {return xAxis(d.Year);})
-                  .y(function(d {return yAxis(d.value)})
+                  .y(function(d {return yAxis(d.value);})
                  )
             .attr("stroke", color(selectedGroup))
     }
