@@ -35,17 +35,58 @@ d3.csv("vgsales.csv", function(error, data) {
         
     });
 
-    var lastActualYear = d3.max(data, function(d) { return d.Year; });
+    var groupedSales = d3.nest()
+        .key(function(d) {return d.Global_Sales; })
+        .key(function(d){return d.NA_Sales; })
+        .key(function(d) {return d.EU_Sales; })
+        .key(function(d){return d.JP_Sales; })
+        .entries(data);
+    
+    d3.select("#selectButton")
+      .selectAll('myOptions')
+     	.data(groupedSales)
+      .enter()
+    	.append('option')
+      .text(function (d) { return d; }) 
+      .attr("value", function (d) { return d; }); 
 
+    function update(selectedGroup) {
+
+      // Create new data with the selection?
+      var dataFilter = data.filter(function(d){return d.name==selectedGroup})
+
+      // Give these new data to update line
+      lineGenerator
+          .datum(dataFilter)
+          .attr("d", d3.line()
+            .x(function(d) { return xAxis(d.Year) })
+            .y(function(d) { return yAxis(+d.TotalSales) })
+          )
+          .attr("stroke", function(d){ return color(selectedGroup) })
+    }
+
+    var selection = d3.select("#selectButton").on("change", function(d) {
+        // recover the option that has been chosen
+        var selectedOption = d3.select(this).property("value");
+        // run the updateChart function with this selected option
+        update(selectedOption);
+    });
+
+    
+
+    
     var nestedData = d3.nest()
         .key(function(d) {return d.Genre; })
         .key(function(d){return d.fiveYear; })
         .rollup(function(v) {
-            return d3.sum(v, function(d) { return d.Global_Sales; });
+            return d3.sum(v, function(d) { return d.selection; });
         })
         .entries(data);
+
+    
         
-        
+    var lastActualYear = d3.max(data, function(d) { return d.Year; });
+
      nestedData.forEach(function(genreGrouped) {
         genreGrouped.values = genreGrouped.values.map(function(d) {
             var startYear = parseInt(d.key.split("-")[0]);
@@ -59,6 +100,9 @@ d3.csv("vgsales.csv", function(error, data) {
          genreGrouped.values.sort(function(a, b) { return a.Year - b.Year; });
      });
 
+
+
+    
     var allFiveYearLabels = nestedData[0].values.map(function(d){return d.fiveYear; });
     
     var tickStep = 200
@@ -67,6 +111,8 @@ d3.csv("vgsales.csv", function(error, data) {
     });
     var maxSalesRounded = Math.ceil(maxSales / tickStep) * tickStep;
     var tickIncrement = d3.range(0, maxSalesRounded + 1, tickStep);
+
+
     
     // Create scales
     var xScale = d3.scale.ordinal()
@@ -106,8 +152,6 @@ d3.csv("vgsales.csv", function(error, data) {
 
 
 
-
-
     
     d3.selection.prototype.moveToFront = function() {
         return this.each(function() {
@@ -121,34 +165,6 @@ d3.csv("vgsales.csv", function(error, data) {
             .range(["#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"])
 
 
-
-    svg.insert("rect", ":first-child") 
-    .attr("width", svgWidth)
-    .attr("height", svgHeight)
-    .style("fill", "none")
-    .style("pointer-events", "all")
-    .on("click", function() {
-       
-        d3.selectAll(".clickable-line")
-            .style("stroke", function(d) { return color(d[0].Genre); }) 
-            .style("opacity", 1)
-            .attr("stroke-width", 3);
-
-        
-        d3.selectAll(".legend rect")
-            .style("opacity", 1);
-    });
-    
-    d3.selectAll(".clickable-line, .legend g")
-        .on("click", function(event) {
-            event.stopPropagation();
-
-        });
-    
-
-
-
-    
     
     // Add line path
     nestedData.forEach(function(group){
@@ -166,6 +182,7 @@ d3.csv("vgsales.csv", function(error, data) {
     });
 
 
+    
 
     
     var legend = svg.append("g")
@@ -209,6 +226,42 @@ d3.csv("vgsales.csv", function(error, data) {
 
 
 
+
+
+
+
+
+
+    
+
+
+
+
+
+    
+
+    svg.insert("rect", ":first-child") 
+    .attr("width", svgWidth)
+    .attr("height", svgHeight)
+    .style("fill", "none")
+    .style("pointer-events", "all")
+    .on("click", function() {
+       
+        d3.selectAll(".clickable-line")
+            .style("stroke", function(d) { return color(d[0].Genre); }) 
+            .style("opacity", 1)
+            .attr("stroke-width", 3);
+
+        
+        d3.selectAll(".legend rect")
+            .style("opacity", 1);
+    });
+    
+    d3.selectAll(".clickable-line, .legend g")
+        .on("click", function(event) {
+            event.stopPropagation();
+
+        });
 
     
 
