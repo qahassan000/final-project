@@ -35,40 +35,33 @@ d3.csv("vgsales.csv", function(error, data) {
         
     });
 
-    var groupedSales = d3.nest()
-        .key(function(d) {return d.Global_Sales; })
-        .key(function(d){return d.NA_Sales; })
-        .key(function(d) {return d.EU_Sales; })
-        .key(function(d){return d.JP_Sales; })
-        .entries(data);
+    var groupedSales = ["Global_Sales", "NA_Sales", "EU_Sales", "JP_Sales"];
     
     d3.select("#selectButton")
-      .selectAll('myOptions')
-     	.data(groupedSales)
+      .selectAll('option')
+      .data(groupedSales)
       .enter()
-    	.append('option')
+      .append('option')
       .text(function (d) { return d; }) 
       .attr("value", function (d) { return d; }); 
 
     function update(selectedGroup) {
 
-      // Create new data with the selection?
-      var dataFilter = data.filter(function(d){return d.name==selectedGroup})
+        var dataFilter = data.map(function(d) {
+            return { Year: d.Year, value: +d[selectedGroup] };
+        });
 
-      // Give these new data to update line
-      lineGenerator
-          .datum(dataFilter)
-          .attr("d", d3.line()
-            .x(function(d) { return xAxis(d.Year) })
-            .y(function(d) { return yAxis(+d.TotalSales) })
-          )
-          .attr("stroke", function(d){ return color(selectedGroup) })
+        d3.select(".myLine")
+            .datum(dataFilter)
+            .attr("d", d3.line()
+                  .x(function(d) {return xAxis(d.Year);})
+                  .y(function(d {return yAxis(d.value)})
+                 )
+            .attr("stroke", color(selectedGroup))
     }
 
     var selection = d3.select("#selectButton").on("change", function(d) {
-        // recover the option that has been chosen
         var selectedOption = d3.select(this).property("value");
-        // run the updateChart function with this selected option
         update(selectedOption);
     });
 
