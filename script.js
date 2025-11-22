@@ -73,6 +73,17 @@ d3.csv("vgsales.csv", function(error, data) {
      });
 
 
+        var maxSales = d3.max(nestedDataFilter, function(g){
+            return d3.max(g.values, function(d){ return d.TotalSales; });
+        });
+        
+        yScale.domain([0, maxSales]);
+    
+        // Update y-axis
+        g.select(".y.axis")
+          .transition().duration(500)
+          .call(yAxis);
+        
         nestedDataFilter.forEach(function(group){
             g.select(".line-" + group.key)
               .datum(group.values)
@@ -188,7 +199,7 @@ d3.csv("vgsales.csv", function(error, data) {
         .attr("d", lineGenerator)
         .on("click", function() {
             d3.selectAll(".clickable-line").attr("stroke-width", 3).style("stroke", "grey").style("opacity", 0.3);
-            d3.select(this).style("stroke", color(group.key)).style("opacity", 1).moveToFront();
+            d3.select(this).style("stroke", function(d) { return color(d[0].Genre); }).style("opacity", 1).moveToFront();
             });
     });
 
@@ -235,21 +246,6 @@ d3.csv("vgsales.csv", function(error, data) {
                 .style("stroke", color(selectedGenre)).style("opacity", 1).moveToFront();
         });
 
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-    
 
     svg.insert("rect", ":first-child") 
     .attr("width", svgWidth)
