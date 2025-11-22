@@ -35,6 +35,7 @@ d3.csv("vgsales.csv", function(error, data) {
         
     });
 
+    var originalData = data.slice();
     var salesTypes = ["Global_Sales", "NA_Sales", "EU_Sales", "JP_Sales"];
     
     d3.select("#selectButton")
@@ -45,43 +46,20 @@ d3.csv("vgsales.csv", function(error, data) {
       .text(function (d) { return d; }) 
       .attr("value", function (d) { return d; }); 
 
+
+
+    var lastActualYear = d3.max(data, function(d) { return d.Year; });
+    
     function update(selectedSales) {
-        nestedData.forEach(function(group) {
-            var newData = group.values.map(function(d) {
-                return {
-                    Genre: group.key,
-                    fiveYear: d.key,
-                    TotalSales: d3.sum(d.values, function(v) { return +v[selectedSales]; })
-                };
-            });
-    
-            g.select(".line-" + group.key)
-              .datum(newData)
-              .attr("d", lineGenerator);
-        });
-    }
-
-    d3.select("#selectButton").on("change", function(d) {
-        var selectedOption = d3.select(this).property("value");
-        update(selectedOption);
-    });
-
-    
-
-    
-    var nestedData = d3.nest()
+       var nestedData = d3.nest()
         .key(function(d) {return d.Genre; })
         .key(function(d){return d.fiveYear; })
         .rollup(function(v) {
-            return d3.sum(v, function(d) { return d.Global_Sales; });
+            return d3.sum(v, function(d) { return +d[selectedSales]; });
         })
-        .entries(data);
+        .entries(originalData);
 
-    
-        
-    var lastActualYear = d3.max(data, function(d) { return d.Year; });
-
-     nestedData.forEach(function(genreGrouped) {
+        nestedData.forEach(function(genreGrouped) {
         genreGrouped.values = genreGrouped.values.map(function(d) {
             var startYear = parseInt(d.key.split("-")[0]);
             var endYear = startYear + 4;
@@ -95,7 +73,27 @@ d3.csv("vgsales.csv", function(error, data) {
      });
 
 
+        nestedDataFiltered.forEach(function(group){
+            g.select(".line-" + group.key)
+              .datum(group.values)
+              .transition().duration(500)
+              .attr("d", lineGenerator);
+        });
+    }
 
+    
+    d3.select("#selectButton").on("change", function(d) {
+        var selectedOption = d3.select(this).property("value");
+        update(selectedOption);
+    });
+
+    
+
+    
+    
+
+    
+    
     
     var allFiveYearLabels = nestedData[0].values.map(function(d){return d.fiveYear; });
     
@@ -164,8 +162,7 @@ d3.csv("vgsales.csv", function(error, data) {
     nestedData.forEach(function(group){
         g.append("path")
         .datum(group.values)
-        .attr("class", "line-" + group.key)
-        .attr("class", "clickable-line")
+        .attr("class", "clickable-line line-" + group.key)
         .attr("fill", "none")
         .attr("stroke", color(group.key))
         .attr("stroke-width", 3)
