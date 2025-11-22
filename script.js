@@ -188,7 +188,11 @@ d3.csv("vgsales.csv", function(error, data) {
         });
 
 
-    
+    d3.selectAll(".clickable-line, .legend g")
+        .on("click", function(d) {
+            d3.event.stopPropagation();
+
+        });
 
     svg.insert("rect", ":first-child") 
     .attr("width", svgWidth)
@@ -207,11 +211,7 @@ d3.csv("vgsales.csv", function(error, data) {
             .style("opacity", 1);
     });
     
-    d3.selectAll(".clickable-line, .legend g")
-        .on("click", function(event) {
-            event.stopPropagation();
-
-        });
+    
 
     
 
