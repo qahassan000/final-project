@@ -132,7 +132,7 @@ d3.csv("vgsales.csv", function(error, data) {
     nestedData.forEach(function(group){
         g.append("path")
         .datum(group.values)
-        .attr("class", "clickable-line")
+        .attr("class", ".clickable-line")
         .attr("fill", "none")
         .attr("stroke", color(group.key))
         .attr("stroke-width", 3)
