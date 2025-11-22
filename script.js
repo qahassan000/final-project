@@ -51,7 +51,7 @@ d3.csv("vgsales.csv", function(error, data) {
     var lastActualYear = d3.max(data, function(d) { return d.Year; });
     
     function update(selectedSales) {
-       var nestedData = d3.nest()
+       var nestedDataFilter = d3.nest()
         .key(function(d) {return d.Genre; })
         .key(function(d){return d.fiveYear; })
         .rollup(function(v) {
@@ -59,7 +59,7 @@ d3.csv("vgsales.csv", function(error, data) {
         })
         .entries(originalData);
 
-        nestedData.forEach(function(genreGrouped) {
+        nestedDataFilter.forEach(function(genreGrouped) {
         genreGrouped.values = genreGrouped.values.map(function(d) {
             var startYear = parseInt(d.key.split("-")[0]);
             var endYear = startYear + 4;
@@ -73,7 +73,7 @@ d3.csv("vgsales.csv", function(error, data) {
      });
 
 
-        nestedDataFiltered.forEach(function(group){
+        nestedDataFilter.forEach(function(group){
             g.select(".line-" + group.key)
               .datum(group.values)
               .transition().duration(500)
@@ -88,7 +88,26 @@ d3.csv("vgsales.csv", function(error, data) {
     });
 
     
+    var nestedData = d3.nest()
+        .key(function(d) {return d.Genre; })
+        .key(function(d){return d.fiveYear; })
+        .rollup(function(v) {
+            return d3.sum(v, function(d) { return d.Global_Sales; });
+        })
+        .entries(data);
 
+        nestedData.forEach(function(genreGrouped) {
+        genreGrouped.values = genreGrouped.values.map(function(d) {
+            var startYear = parseInt(d.key.split("-")[0]);
+            var endYear = startYear + 4;
+            
+            if (endYear > lastActualYear) {
+                endYear = lastActualYear;
+            }
+            return { Genre: genreGrouped.key, fiveYear: startYear + "-" + endYear, Year: startYear, TotalSales: +d.values };
+        });
+         genreGrouped.values.sort(function(a, b) { return a.Year - b.Year; });
+     });
     
     
 
