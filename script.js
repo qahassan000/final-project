@@ -229,19 +229,17 @@ d3.csv("vgsales.csv", function(error, data) {
             .style("border-radius", "4px")
     
         nestedData.forEach(function(group) {
-            var points = g.selectAll(".point-" + group.key)
+            g.selectAll(".point-" + group.key)
                 .data(group.values)
-
-            points.enter()
+                .enter()
                 .append("circle")
-                .attr("class", "point point-" + group.key)
+                .attr("class", "point")
                 .attr("cx", function(d) { return xScale(d.fiveYear) + xScale.rangeBand() / 2;})
                 .attr("cy", function(d) { return yScale(d.TotalSales); })
                 .attr("r", 5)
                 .style("fill", color(group.key))
                 .style("opacity", 0)
                 .on("mouseover", function(d) {
-                    
                     tooltip
                         .style("opacity", 1)
                         .html("Genre: " + d.Genre + "<br>Sales: " + Math.floor(d.TotalSales * 10) / 10)
