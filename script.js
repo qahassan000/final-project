@@ -73,7 +73,7 @@ d3.csv("vgsales.csv", function(error, data) {
 
 
     
-    var allFiveYearLabels = nestedData[0].values.map(function(d){return d.fiveYear; }).sort();
+    var allFiveYearLabels = nestedData[0].values.map(function(d){return d.fiveYear; });
     
     var tickStep = 100
     var maxSales = d3.max(nestedData, function(g){
@@ -246,7 +246,7 @@ d3.csv("vgsales.csv", function(error, data) {
                         .style("opacity", 1)
                         .html("Genre: " + d.Genre + "<br>Sales: " + Math.floor(d.TotalSales * 10) / 10)
                         .style("left", (d3.event.pageX + 10) + "px")
-                        .style("top", (d3.event.pageY - 28) + "px");
+                        .style("top", (d3.event.pageY - 20) + "px");
                     
                     d3.select(this).style("opacity", 1);
                 })
@@ -264,8 +264,9 @@ d3.csv("vgsales.csv", function(error, data) {
             g.selectAll(".point-" + group.key)
                .data(group.values)
                .transition().duration(700)
+               .attr("cy", function(d) { return yScale(d[selectedType]); });
                .attr("cx", function(d) { return xScale(d.fiveYear) + xScale.rangeBand() / 2;})
-               .attr("cy", function(d) { return yScale(d.TotalSales); });
+               
         });
 
         var tickStep = 100
