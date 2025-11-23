@@ -73,7 +73,7 @@ d3.csv("vgsales.csv", function(error, data) {
 
 
     
-    var allFiveYearLabels = nestedData[0].values.map(function(d){return d.fiveYear; });
+    var allFiveYearLabels = nestedData[0].values.map(function(d){return d.fiveYear; }).sort();
     
     var tickStep = 100
     var maxSales = d3.max(nestedData, function(g){
