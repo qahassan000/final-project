@@ -252,7 +252,7 @@ d3.csv("vgsales.csv", function(error, data) {
                 })
                 .on("mouseout", function(d) {
                     tooltip.style("opacity", 0)
-                    d3.selectAll("point").style("opacity", 0);
+                    d3.selectAll(".point").style("opacity", 0);
                 })
         });
 
