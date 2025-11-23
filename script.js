@@ -9,6 +9,18 @@ var svg = d3.select("#main");
 var g = svg.select("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+d3.select("#selectButton")
+        .selectAll("option")
+        .data(saleTypes)
+        .enter()
+        .append("option")
+        .text(function(d) {return d.replace("_", " ");})
+        .attr("value", function(d) {return d;});
+
+
+var selectedGenres = new Set(["Action", "Sports", "Role-Playing", "Adventure", "Fighting", "Shooter", "Racing"]);
+var saleTypes = ["Global_Sales", "NA_Sales", "EU_Sales", "JP_Sales"]
+
 
 d3.csv("vgsales.csv", function(error, data) {
     if (error) throw error;
@@ -16,16 +28,11 @@ d3.csv("vgsales.csv", function(error, data) {
     data = data.filter(function(d) {
         return d.Year && !isNaN(+d.Year) && +d.Year <= 2017;
     });
-
-    var selectedGenres = new Set(["Action", "Sports", "Role-Playing", "Adventure", "Fighting", "Shooter", "Racing"]);
     
     // Convert strings to numbers
     data.forEach(function(d) {
         d.Year = +d.Year;
-        d.Global_Sales = +d.Global_Sales;
-        d.NA_Sales = +d.NA_Sales;
-        d.EU_Sales = +d.EU_Sales;
-        d.JP_Sales = +d.JP_Sales;        
+        saleTypes.forEach(function(type){d[type] = +d[type];});      
         var fiveYearStart = Math.floor(d.Year / 5) * 5;
         d.fiveYear = fiveYearStart + "-" + (fiveYearStart + 4);
 
@@ -40,24 +47,26 @@ d3.csv("vgsales.csv", function(error, data) {
     var nestedData = d3.nest()
         .key(function(d) {return d.Genre; })
         .key(function(d){return d.fiveYear; })
-        .rollup(function(v) {
-            return d3.sum(v, function(d) { return d.Global_Sales; });
-        })
         .entries(data);
 
     
-        
     var lastActualYear = d3.max(data, function(d) { return d.Year; });
 
+    
      nestedData.forEach(function(genreGrouped) {
         genreGrouped.values = genreGrouped.values.map(function(d) {
             var startYear = parseInt(d.key.split("-")[0]);
             var endYear = startYear + 4;
+            if (endYear > lastActualYear) {endYear = lastActualYear;}
             
-            if (endYear > lastActualYear) {
-                endYear = lastActualYear;
-            }
-            return { Genre: genreGrouped.key, fiveYear: startYear + "-" + endYear, Year: startYear, TotalSales: +d.values };
+            var objects = { Genre: genreGrouped.key, fiveYear: startYear + "-" + endYear, Year: startYear };
+            saleTypes.forEach(function(type) { objects[type = 0]; });
+            d.values.forEach(function(row) {
+                saleTypes.forEach(function(type) { objects[type] += +row[type]; });
+            });
+            objects.TotalSales = objects.Global_Sales;
+            return objects;
+            
         });
          genreGrouped.values.sort(function(a, b) { return a.Year - b.Year; });
      });
@@ -108,7 +117,7 @@ d3.csv("vgsales.csv", function(error, data) {
         .call(xAxis);
 
     g.append("g")
-        .attr("class", "axis")
+        .attr("class", "axis y")
         .call(yAxis);
 
 
@@ -191,6 +200,8 @@ d3.csv("vgsales.csv", function(error, data) {
 
     
 
+
+    
     svg.insert("rect", ":first-child") 
     .attr("width", svgWidth)
     .attr("height", svgHeight)
@@ -207,7 +218,6 @@ d3.csv("vgsales.csv", function(error, data) {
         d3.selectAll(".legend rect")
             .style("opacity", 1);
     });
-
 
     
 
@@ -245,7 +255,42 @@ d3.csv("vgsales.csv", function(error, data) {
                 })
         });
 
-    
+
+    function updateChart(selectedType) {
+        nestedData.forEach(function(group) {
+            group.values.forEach(function(d) {d.TotalSales = d[selectedType];});
+        });
+
+        var tickStep = 200
+        var maxSales = d3.max(nestedData, function(g){
+        return d3.max(g.values, function(d){return d.TotalSales; });
+        });
+        var maxSalesRounded = Math.ceil(maxSales / tickStep) * tickStep;
+        var tickIncrement = d3.range(0, maxSalesRounded + 1, tickStep);
+
+        yScale.domain([0, maxSalesRounded]);
+        yAxis.tickValues(tickIncrement);
+
+        g.append(".axis.y")
+            .transition().duration(700)
+            .call(yAxis);
+
+        d3.selectAll(".clickable-line")
+            .transition().duration(700)
+            .attr("d", lineGenerator);
+
+        nestedData.forEach(function(group) {
+            g.selectAll(".point")
+               .data(group.values)
+               .attr("cy", function(d) { return yScale(d.TotalSales); });
+        }); 
+    }
+
+    d3.select("#selectButton").on("change", function() {
+       var selectedOption = d3.select(this).property("value");
+       updateChart(selectedOption);     
+    });
+
     
 });
 
