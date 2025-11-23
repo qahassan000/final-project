@@ -259,14 +259,7 @@ d3.csv("vgsales.csv", function(error, data) {
 
     function updateChart(selectedType) {
         nestedData.forEach(function(group) {
-            group.values.forEach(function(d) {d.TotalSales = d[selectedType];});
-
-            g.selectAll(".point-" + group.key)
-               .data(group.values)
-               .transition().duration(700)
-               .attr("cy", function(d) { return yScale(d.TotalSales); })
-               .attr("cx", function(d) { return xScale(d.fiveYear) + xScale.rangeBand() / 2;});
-               
+            group.values.forEach(function(d) {d.TotalSales = d[selectedType];});               
         });
 
         var tickStep = 100
@@ -287,6 +280,15 @@ d3.csv("vgsales.csv", function(error, data) {
         d3.selectAll(".clickable-line")
             .transition().duration(700)
             .attr("d", lineGenerator);
+
+
+        nestedData.forEach(function(group) {
+            g.selectAll(".point-" + group.key)
+                .data(group.values)
+                .transition().duration(700)
+                .attr("cy", function(d) { return yScale(d.TotalSales); }) // use TotalSales
+                .attr("cx", function(d) { return xScale(d.fiveYear) + xScale.rangeBand()/2; });
+        });
     }
 
     d3.select("#selectButton").on("change", function() {
