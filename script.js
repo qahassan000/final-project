@@ -234,7 +234,7 @@ d3.csv("vgsales.csv", function(error, data) {
 
             points.enter()
                 .append("circle")
-                .attr("class", "point")
+                .attr("class", "point point-" + group.key)
                 .attr("cx", function(d) { return xScale(d.fiveYear) + xScale.rangeBand() / 2;})
                 .attr("cy", function(d) { return yScale(d.TotalSales); })
                 .attr("r", 5)
