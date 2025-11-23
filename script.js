@@ -240,12 +240,14 @@ d3.csv("vgsales.csv", function(error, data) {
                 .style("fill", color(group.key))
                 .style("opacity", 0)
                 .on("mouseover", function(d) {
+                    var pointX = xScale(d.fiveYear) + xScale.rangeBand()/2 + margin.left;
+                    var pointY = yScale(d.TotalSales) + margin.top;
                     
                     tooltip
                         .style("opacity", 1)
                         .html("Genre: " + d.Genre + "<br>Sales: " + Math.floor(d.TotalSales * 10) / 10)
-                        .style("left", (d3.event.pageX + 10) + "px")
-                        .style("top", (d3.event.pageY - 20) + "px");
+                        .style("left", (pointX + 10) + "px")
+                        .style("top", (pointY - 20) + "px");
                     
                     d3.select(this).style("opacity", 1);
                 })
