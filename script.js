@@ -246,11 +246,13 @@ d3.csv("vgsales.csv", function(error, data) {
                         .style("left", (d3.event.pageX + 10) + "px")
                         .style("top", (d3.event.pageY - 20) + "px");
                     
-                    d3.select(this).style("opacity", 1);
+                    d3.selectAll(".point")
+                        .filter(function(p) { return p === d; })
+                        .style("opacity", 1);
                 })
                 .on("mouseout", function(d) {
                     tooltip.style("opacity", 0)
-                    d3.select(this).style("opacity", 0);
+                    d3.selectAll("point").style("opacity", 0);
                 })
         });
 
@@ -282,6 +284,7 @@ d3.csv("vgsales.csv", function(error, data) {
             g.selectAll(".point")
                .data(group.values)
                .transition().duration(700)
+               .attr("cx", function(d) { return xScale(d.fiveYear) + xScale.rangeBand() / 2;})
                .attr("cy", function(d) { return yScale(d.TotalSales); });
         }); 
     }
