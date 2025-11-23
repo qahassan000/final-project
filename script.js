@@ -9,6 +9,9 @@ var svg = d3.select("#main");
 var g = svg.select("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+var selectedGenres = new Set(["Action", "Sports", "Role-Playing", "Adventure", "Fighting", "Shooter", "Racing"]);
+var saleTypes = ["Global_Sales", "NA_Sales", "EU_Sales", "JP_Sales"]
+
 d3.select("#selectButton")
         .selectAll("option")
         .data(saleTypes)
@@ -16,10 +19,6 @@ d3.select("#selectButton")
         .append("option")
         .text(function(d) {return d.replace("_", " ");})
         .attr("value", function(d) {return d;});
-
-
-var selectedGenres = new Set(["Action", "Sports", "Role-Playing", "Adventure", "Fighting", "Shooter", "Racing"]);
-var saleTypes = ["Global_Sales", "NA_Sales", "EU_Sales", "JP_Sales"]
 
 
 d3.csv("vgsales.csv", function(error, data) {
@@ -60,7 +59,7 @@ d3.csv("vgsales.csv", function(error, data) {
             if (endYear > lastActualYear) {endYear = lastActualYear;}
             
             var objects = { Genre: genreGrouped.key, fiveYear: startYear + "-" + endYear, Year: startYear };
-            saleTypes.forEach(function(type) { objects[type = 0]; });
+            saleTypes.forEach(function(type) { objects[type] = 0; });
             d.values.forEach(function(row) {
                 saleTypes.forEach(function(type) { objects[type] += +row[type]; });
             });
@@ -271,7 +270,7 @@ d3.csv("vgsales.csv", function(error, data) {
         yScale.domain([0, maxSalesRounded]);
         yAxis.tickValues(tickIncrement);
 
-        g.append(".axis.y")
+        g.select(".axis.y")
             .transition().duration(700)
             .call(yAxis);
 
