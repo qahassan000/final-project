@@ -229,9 +229,10 @@ d3.csv("vgsales.csv", function(error, data) {
             .style("border-radius", "4px")
     
         nestedData.forEach(function(group) {
-            g.selectAll(".point-" + group.key)
+            var points = g.selectAll(".point-" + group.key)
                 .data(group.values)
-                .enter()
+
+            points.enter()
                 .append("circle")
                 .attr("class", "point")
                 .attr("cx", function(d) { return xScale(d.fiveYear) + xScale.rangeBand() / 2;})
@@ -240,14 +241,12 @@ d3.csv("vgsales.csv", function(error, data) {
                 .style("fill", color(group.key))
                 .style("opacity", 0)
                 .on("mouseover", function(d) {
-                    var pointX = xScale(d.fiveYear) + xScale.rangeBand()/2 + margin.left;
-                    var pointY = yScale(d.TotalSales) + margin.top;
                     
                     tooltip
                         .style("opacity", 1)
                         .html("Genre: " + d.Genre + "<br>Sales: " + Math.floor(d.TotalSales * 10) / 10)
-                        .style("left", (pointX + 10) + "px")
-                        .style("top", (pointY - 20) + "px");
+                        .style("left", (d3.event.pageX + 10) + "px")
+                        .style("top", (d3.event.pageY - 28) + "px");
                     
                     d3.select(this).style("opacity", 1);
                 })
@@ -261,6 +260,12 @@ d3.csv("vgsales.csv", function(error, data) {
     function updateChart(selectedType) {
         nestedData.forEach(function(group) {
             group.values.forEach(function(d) {d.TotalSales = d[selectedType];});
+
+            g.selectAll(".point-" + group.key)
+               .data(group.values)
+               .transition().duration(700)
+               .attr("cx", function(d) { return xScale(d.fiveYear) + xScale.rangeBand() / 2;})
+               .attr("cy", function(d) { return yScale(d.TotalSales); });
         });
 
         var tickStep = 100
@@ -280,14 +285,6 @@ d3.csv("vgsales.csv", function(error, data) {
         d3.selectAll(".clickable-line")
             .transition().duration(700)
             .attr("d", lineGenerator);
-
-        nestedData.forEach(function(group) {
-            g.selectAll(".point")
-               .data(group.values)
-               .transition().duration(700)
-               .attr("cx", function(d) { return xScale(d.fiveYear) + xScale.rangeBand() / 2;})
-               .attr("cy", function(d) { return yScale(d.TotalSales); });
-        }); 
     }
 
     d3.select("#selectButton").on("change", function() {
