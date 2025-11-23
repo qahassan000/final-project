@@ -240,11 +240,14 @@ d3.csv("vgsales.csv", function(error, data) {
                 .style("fill", color(group.key))
                 .style("opacity", 0)
                 .on("mouseover", function(d) {
+                    var matrix = this.getScreenCTM()
+                        .translate(+this.getAttribute("cx"), +this.getAttribute("cy"));
+                    
                     tooltip
                         .style("opacity", 1)
                         .html("Genre: " + d.Genre + "<br>Sales: " + Math.floor(d.TotalSales * 10) / 10)
-                        .style("left", (d3.event.pageX + 10) + "px")
-                        .style("top", (d3.event.pageY - 20) + "px");
+                        .style("left", (matrix.e + 10) + "px")
+                        .style("top", (matrix.f - 20) + "px");
                     
                     d3.selectAll(".point")
                         .filter(function(p) { return p === d; })
