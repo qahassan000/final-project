@@ -279,6 +279,8 @@ d3.csv("vgsales.csv", function(error, data) {
         yScale.domain([0, maxSalesRounded]);
         yAxis.tickValues(tickIncrement);
 
+        lineGenerator.y(function(d) { return yScale(d.TotalSales); });
+
         g.select(".axis.y")
             .transition().duration(700)
             .call(yAxis);
