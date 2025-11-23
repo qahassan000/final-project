@@ -264,8 +264,8 @@ d3.csv("vgsales.csv", function(error, data) {
             g.selectAll(".point-" + group.key)
                .data(group.values)
                .transition().duration(700)
-               .attr("cy", function(d) { return yScale(d[selectedType]); });
-               .attr("cx", function(d) { return xScale(d.fiveYear) + xScale.rangeBand() / 2;})
+               .attr("cy", function(d) { return yScale(d[selectedType]); })
+               .attr("cx", function(d) { return xScale(d.fiveYear) + xScale.rangeBand() / 2;});
                
         });
 
