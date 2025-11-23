@@ -264,7 +264,7 @@ d3.csv("vgsales.csv", function(error, data) {
             g.selectAll(".point-" + group.key)
                .data(group.values)
                .transition().duration(700)
-               .attr("cy", function(d) { return yScale(d[selectedType]); })
+               .attr("cy", function(d) { return yScale(d.TotalSales); })
                .attr("cx", function(d) { return xScale(d.fiveYear) + xScale.rangeBand() / 2;});
                
         });
@@ -279,7 +279,6 @@ d3.csv("vgsales.csv", function(error, data) {
         yScale.domain([0, maxSalesRounded]);
         yAxis.tickValues(tickIncrement);
 
-        lineGenerator.y(function(d) { return yScale(d.TotalSales); });
 
         g.select(".axis.y")
             .transition().duration(700)
