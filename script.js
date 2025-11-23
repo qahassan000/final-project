@@ -75,7 +75,7 @@ d3.csv("vgsales.csv", function(error, data) {
     
     var allFiveYearLabels = nestedData[0].values.map(function(d){return d.fiveYear; });
     
-    var tickStep = 200
+    var tickStep = 100
     var maxSales = d3.max(nestedData, function(g){
         return d3.max(g.values, function(d){return d.TotalSales; });
     });
@@ -260,7 +260,7 @@ d3.csv("vgsales.csv", function(error, data) {
             group.values.forEach(function(d) {d.TotalSales = d[selectedType];});
         });
 
-        var tickStep = 200
+        var tickStep = 100
         var maxSales = d3.max(nestedData, function(g){
         return d3.max(g.values, function(d){return d.TotalSales; });
         });
@@ -281,6 +281,7 @@ d3.csv("vgsales.csv", function(error, data) {
         nestedData.forEach(function(group) {
             g.selectAll(".point")
                .data(group.values)
+               .transition().duration(700)
                .attr("cy", function(d) { return yScale(d.TotalSales); });
         }); 
     }
