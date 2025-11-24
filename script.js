@@ -160,6 +160,7 @@ d3.csv("vgsales.csv", function(error, data) {
         .on("click", function(d) {
             d3.selectAll(".clickable-line").attr("stroke-width", 3).style("stroke", "grey").style("opacity", 0.3);
             d3.select(this).style("stroke", color(d[0].Genre)).style("opacity", 1).moveToFront();
+            g.selectAll(".point-" + d[0].Genre).moveToFront();
             d3.event.stopPropagation();
             });
     });
