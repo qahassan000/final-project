@@ -115,10 +115,22 @@ d3.csv("vgsales.csv", function(error, data) {
         .attr("transform", "translate(0," + CHART_HEIGHT + ")")
         .call(xAxis);
 
+    svg.append("text")
+        .attr("text-anchor", "middle")
+        .attr("x", CHART_WIDTH)
+        .attr("y", CHART_HEIGHT + margin.top + 20)
+        .text("Years");
+
     g.append("g")
         .attr("class", "axis y")
         .call(yAxis);
 
+    svg.append("text")
+        .attr("text-anchor", "middle")
+        .attr("transform", "rotate(-90)")
+        .attr("y", -margin.left + 20)
+        .attr("x", -margin.top)
+        .text("Sales (Millions)");
 
 
 
