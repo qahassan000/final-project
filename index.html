@@ -47,12 +47,13 @@
 </head>
 <body>
 	
-	<h1>Interactive Visualization on Video Game Sales</h1>
 	<h2 style= "text-align: center;">Change in Video Game Sales Across the Years</h2>
 		
 	<div id="chart-container" style="position: relative; width: 800px; height: 600px">
 		<select id="selectButton"></select>
-		<svg id="main" width="800" height="600"></svg>
+		<svg id="main" width="800" height="600">
+			<g transform="translate(80,50)"></g>
+		</svg>
 	</div>
 	
 	<div id="tooltip"></div>
@@ -61,6 +62,7 @@
 	<script src="script.js"></script>
 </body>
 </html>
+
 
 
 
