@@ -111,26 +111,26 @@ d3.csv("vgsales.csv", function(error, data) {
     var yAxis = d3.svg.axis().scale(yScale).orient("left").tickValues(tickIncrement).tickFormat(d3.format("d"));
 
     g.append("g")
-        .attr("class", "axis")
+        .attr("class", "x axis")
         .attr("transform", "translate(0," + CHART_HEIGHT + ")")
         .call(xAxis);
 
     svg.append("text")
         .attr("text-anchor", "middle")
-        .attr("x", CHART_WIDTH)
-        .attr("y", CHART_HEIGHT + margin.top + 20)
-        .text("Years");
+        .attr("x", margin.left + CHART_WIDTH / 2)
+        .attr("y", CHART_HEIGHT + margin.top + 40)
+        .text("5-Year Interval");
 
     g.append("g")
-        .attr("class", "axis y")
+        .attr("class", "y axis")
         .call(yAxis);
 
     svg.append("text")
         .attr("text-anchor", "middle")
         .attr("transform", "rotate(-90)")
-        .attr("y", -margin.left + 20)
-        .attr("x", -margin.top)
-        .text("Sales (Millions)");
+        .attr("x", -(margin.top + CHART_HEIGHT / 2))
+        .attr("y", margin.left - 50)
+        .text("Total Sales (Millions)");
 
 
 
@@ -285,7 +285,7 @@ d3.csv("vgsales.csv", function(error, data) {
         yAxis.tickValues(tickIncrement);
 
 
-        g.select(".axis.y")
+        g.select(".y.axis")
             .transition().duration(700)
             .call(yAxis);
 
