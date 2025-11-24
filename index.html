@@ -22,31 +22,46 @@
 		rect {
 			stroke: white;
 		}
+
+		#chart-container {
+			position: relative;
+			width: 800px; 
+			height: 600px;
+			margin: 0 auto;
+		}
+		
+		#selectButton {
+			position: absolute;
+			left: 10px;
+			top: 50px;
+			z-index: 10;
+		}
 		
 		.clickable-line {
 			cursor: pointer;
 		}
+
+		
 		
 	</style>
 </head>
 <body>
 	
 	<h1>Interactive Visualization on Video Game Sales</h1>
-	<div style= "text-align: center;">
-		<svg id="main" width="800" height="600">
-			<text id='label' x='20' y='20'>Change in Video Game Sales Across the Years</text>
-			<g transform="translate(80,50)"></g>
-		</svg>
+	<h2 style= "text-align: center;">Change in Video Game Sales Across the Years</h2>
+		
+	<div id="chart-container" style="position: relative; width: 800px; height: 600px">
+		<select id="selectButton"></select>
+		<svg id="main" width="800" height="600"></svg>
 	</div>
 	
 	<div id="tooltip"></div>
-
-	<select id="selectButton"></select>
 
 		
 	<script src="script.js"></script>
 </body>
 </html>
+
 
 
 
