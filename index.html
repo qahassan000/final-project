@@ -41,7 +41,10 @@
 			cursor: pointer;
 		}
 
-		
+		#paragraph {
+			font: Arial;
+			font-size: 14px;
+		}
 		
 	</style>
 </head>
@@ -58,9 +61,9 @@
 	
 	<div id="tooltip"></div>
 
-	<div id="Paragraph" style="text-align: center;">
+	<div id="paragraph" style="text-align: center;">
 		<p>The dataset used is Video Game Sales by Anand Shaw, it contains the following attributes:
-		Rank, Name, Platform, Year, Genre, Publisher, NA_Sales (in millions), EU_Sales (in millions),
+		Rank, Name, Platform, Year, Genre, Publisher,<br> NA_Sales (in millions), EU_Sales (in millions),
 		JP_Sales (in millions), Other_Sales (in millions), Global_Sales (in millions).</p>
 		<p>The visualization utilizes Year, Genre, and the different sales types to display the
 		change in video game sales across genres throughout the years.</p>
@@ -72,6 +75,7 @@
 	<script src="script.js"></script>
 </body>
 </html>
+
 
 
 
