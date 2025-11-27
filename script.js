@@ -234,7 +234,7 @@ d3.csv("vgsales.csv", function(error, data) {
             .on("mouseover", function(d) {
                 tooltip
                     .style("opacity", 1)
-                    .html("Genre: " + d.Genre + "<br>Total Sales: " + Math.floor(d.TotalSales * 10) / 10)
+                    .html("5-Year Interval: " + d.fiveYear + "<br>Genre: " + d.Genre + "<br>Total Sales: " + Math.floor(d.TotalSales * 10) / 10)
                     .style("left", (d3.event.pageX + 10) + "px")
                     .style("top", (d3.event.pageY - 20) + "px");
                 
