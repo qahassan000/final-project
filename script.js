@@ -13,7 +13,7 @@ var g = svg.select("g")
 
 // Genres and sale types to include
 var selectedGenres = new Set(["Action", "Sports", "Role-Playing", "Adventure", "Fighting", "Shooter", "Racing"]);
-var saleTypes = ["Global_Sales", "NA_Sales", "EU_Sales", "JP_Sales"];
+var saleTypes = ["Global_Sales", "NA_Sales", "EU_Sales", "JP_Sales", "Other_Sales"];
 
 // Populate dropdown menu
 d3.select("#selectButton")
